@@ -592,9 +592,12 @@
       nav.classList.toggle('is-scrolled', y > 40);
       // logo: full wordmark at the top; SOCIAL slides left and tucks under DRVN as you scroll
       if (navLogo) {
-        const lp = clamp(y / 260, 0, 1), e = lp * lp * (3 - 2 * lp);
-        navLogo.style.setProperty('--vbw', (688.62 - (688.62 - 346) * e).toFixed(2));
-        logoSocial.style.transform = `translateX(${(-372 * e).toFixed(1)}px)`;  // far enough that the L's foot clears the N
+        if (innerWidth < 900) nav.classList.toggle('is-tucked', y > 60);   // phones: a CSS tween (scroll events are too sparse on iOS to drive it per-frame)
+        else {
+          const lp = clamp(y / 260, 0, 1), e = lp * lp * (3 - 2 * lp);
+          navLogo.style.setProperty('--vbw', (688.62 - (688.62 - 346) * e).toFixed(2));
+          logoSocial.style.transform = `translateX(${(-372 * e).toFixed(1)}px)`;  // far enough that the L's foot clears the N
+        }
       }
       const navMid = 46;
       nav.classList.toggle('is-light', !nav.classList.contains('is-open') && lightSecs.some(s => { const r = s.getBoundingClientRect(); return r.top <= navMid && r.bottom >= navMid; }));
@@ -924,7 +927,7 @@
     }
     const size = () => { const r = cv.getBoundingClientRect(); cv.width = Math.ceil(r.width || innerWidth); cv.height = Math.ceil(Math.max(r.height, innerHeight, (visualViewport && visualViewport.height) || 0)); };   // 1 noise dot per CSS pixel, sized to the full (large) viewport so iOS toolbars never leave a gap
     size(); addEventListener('resize', size); addEventListener('orientationchange', () => setTimeout(size, 300));
-    const FRAME = innerWidth < 900 ? 80 : 33;   // phones: ~12fps is plenty for grain and leaves the GPU for scrolling
+    const FRAME = 33;   // same grain cadence on phones as desktop (phones no longer run live WebGL, so there is headroom)
     let k = 0, last = 0;
     const draw = () => {
       k = (k + 1 + (Math.random() * (tiles.length - 1) | 0)) % tiles.length;

@@ -1943,3 +1943,23 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
 .founder__photo{width:clamp(150px,13vw,210px);filter:grayscale(1);transition:filter .6s var(--ease),transform .6s var(--ease-out)}
 .founder:hover .founder__photo{filter:none;transform:scale(1.03)}
 @media (max-width:900px){.founder__photo{width:140px}}
+
+/* pass 7 */
+/* animated titles: room for the italic overhang at the end of every line, and on each testimonial word */
+.h-xl .line,.glow-title .line,.pj-h .line{padding-right:.24em}
+.tq__w{padding:0 .14em 0 .02em;margin:0 -.14em 0 -.02em}
+@media (max-width:900px){
+  .pfoot__in .section-head__lede{padding:0 14px}
+  .gbtn .btn__play{width:30px;height:30px}
+  .gbtn .btn__play svg{width:12px;height:12px}
+  /* nav logo tuck as a tween */
+  .logo-clip{transition:width .75s var(--ease)}
+  .logo-social{transition:transform .75s var(--ease)}
+  .nav.is-tucked .nav__logo{--vbw:346}
+  .nav.is-tucked .logo-social{transform:translateX(-372px)}
+  html.intro .logo-clip,html.intro .logo-social{transition:none}
+  /* project panels: logos back to their original size */
+  .lw__logo{height:26px}
+  .lw__wordmark{font-size:17px}
+  .lw__top{max-width:52%}
+}
