@@ -1,0 +1,8 @@
+# www → apex
+https://www.drvn.social/* https://drvn.social/:splat 301
+# old site paths (add any legacy Webflow URLs here as they turn up in Search Console)
+/work/* /work 301
+/blog/* /insights 301
+/insight/* /insights 301
+/contact-us /contact 301
+/about-us /about 301
