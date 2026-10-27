@@ -1924,3 +1924,22 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
 /* homepage: phones get the inner-page CTA instead of the scroll-driven finale */
 .pfoot--home{display:none}
 @media (max-width:900px){.finale{display:none}.pfoot--home{display:flex}}
+
+/* phones: glass icons are baked filmstrips (no live WebGL), so scrolling stays smooth */
+.hero__gems{display:none}
+@keyframes gemFloat{to{transform:translateY(-14px)}}
+@media (max-width:900px){
+  .hero__gems{display:block;position:absolute;inset:0;pointer-events:none}
+  .hero__gem{position:absolute;width:var(--s,120px);height:var(--s,120px);animation:gemFloat 5.5s ease-in-out infinite alternate}
+  .hero__gem.g1{left:6%;top:20%;--s:150px}
+  .hero__gem.g2{right:5%;top:30%;--s:118px;animation-delay:-2s}
+  .hero__gem.g3{left:54%;top:50%;--s:128px;animation-delay:-3.5s}
+  body{position:relative}
+  .page-glass{position:absolute;top:0;left:0;right:0;height:100%;overflow:hidden}
+  .pg-gem{position:absolute;width:112px;height:112px;animation:gemFloat 6s ease-in-out infinite alternate}
+}
+/* founders: portrait above the name, larger, mono until hovered */
+.founder{grid-template-columns:1fr;gap:18px}
+.founder__photo{width:clamp(150px,13vw,210px);filter:grayscale(1);transition:filter .6s var(--ease),transform .6s var(--ease-out)}
+.founder:hover .founder__photo{filter:none;transform:scale(1.03)}
+@media (max-width:900px){.founder__photo{width:140px}}

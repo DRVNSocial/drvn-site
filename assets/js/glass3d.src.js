@@ -11,8 +11,9 @@ import { mergeGeometries, toCreasedNormals } from 'three/examples/jsm/utils/Buff
 const heroHost = document.getElementById('heroStickers');
 const heroSec = document.getElementById('hero');
 if (!window.WebGLRenderingContext) document.documentElement.classList.add('gem-fail');
+const PHONE = innerWidth < 900 || matchMedia('(pointer:coarse)').matches;
 if (heroHost && heroSec && window.WebGLRenderingContext) {
-  try { init({ host: heroHost, area: heroSec, hero: true, titleSel: '.hero__title .ch', titleEl: '.hero__title', video: '.hero__video' }); }
+  try { init({ host: heroHost, area: heroSec, hero: true, bakeOnly: PHONE, titleSel: '.hero__title .ch', titleEl: '.hero__title', video: '.hero__video' }); }
   catch (e) { document.documentElement.classList.add('gem-fail'); heroHost.dataset.g3dError = e.message; console.error('glass3d', e); dispatchEvent(new Event('drvn:glass-ready')); }
 }
 
@@ -375,6 +376,13 @@ function init(cfg) {
   }
   while (SLOTS.length < Math.max(5, count)) { const Z = cfg.zones ? cfg.zones[SLOTS.length % cfg.zones.length] : { x0: .3, x1: .7, y0: .3, y1: .65 }; SLOTS.push([Z.x0 + Math.random() * (Z.x1 - Z.x0), Z.y0 + Math.random() * (Z.y1 - Z.y0)]); }
   if (showAll && cfg.hero) { SLOTS.length = 0; Object.keys(SHAPES).forEach((k, i) => SLOTS.push([0.08 + (i % 7) * 0.14, i < 7 ? 0.28 : 0.64])); keys.sort(); }
+  if (cfg.bakeOnly) {                                   // phones: no live scene at all — bake the strips, then get out
+    try { renderer.dispose(); renderer.forceContextLoss(); } catch (e) {}
+    try { renderer.domElement.remove(); } catch (e) {}
+    bakeGems(true);
+    if (cfg.hero) dispatchEvent(new Event('drvn:glass-ready'));
+    return;
+  }
   const objs = [];
   for (let i = 0; i < count; i++) {
     const name = keys[i];
@@ -545,7 +553,7 @@ function init(cfg) {
      Each icon is rendered once, after the opening sequence, into a short "wobble" filmstrip
      (24 frames of a gentle turn back and forth). The page then plays those strips with CSS
      (steps()), so every emoji below the hero is real glass but costs nothing to animate. */
-  function bakeGems() {
+  function bakeGems(now) {
     const BIG = new Set((document.documentElement.dataset.gemBig || '').split(',').filter(Boolean));
     const F = 24, mob = innerWidth < 760;
     const sizeFor = n => BIG.has(n) ? (mob ? 360 : 300) : (mob ? 220 : 160);   // phones bake larger: the strips are shown on a 3x screen
@@ -580,7 +588,9 @@ function init(cfg) {
       bk.onBeforeRender = r => { bm.colorWrite = dbg || r.getRenderTarget() !== null; };
       sc.add(bk);
       const only = ((location.hash.match(/gems=([\w,]+)/) || [])[1] || '').split(',').filter(Boolean);   // #gems=heart,rocket bakes only those (testing)
-      const names = only.filter(n => SHAPES[n]).length ? only.filter(n => SHAPES[n]) : Object.keys(SHAPES), jobs = [];
+      // phones (bake-only): just the icons this page actually shows, so the bake finishes in a second or two
+      const used = now ? [...new Set([...document.querySelectorAll('[data-gem]')].map(e => e.dataset.gem).concat([...document.querySelectorAll('.gem')].map(e => (e.style.getPropertyValue('--g').match(/--gem-([a-z0-9-]+)/) || [])[1]).filter(Boolean)))].filter(n => SHAPES[n]) : [];
+      const names = only.filter(n => SHAPES[n]).length ? only.filter(n => SHAPES[n]) : (used.length ? used : Object.keys(SHAPES)), jobs = [];
       names.forEach(n => jobs.push(n));
       const out = {};
       let cur = null, i = 0;
@@ -626,7 +636,7 @@ function init(cfg) {
     const go = () => {
       const v = document.getElementById('heroVideo');
       const run = () => { if (fired) return; fired = true; (window.requestIdleCallback || setTimeout)(start, { timeout: 1500 }); };
-      if (!v || v.ended || matchMedia('(prefers-reduced-motion: reduce)').matches) return run();
+      if (now || !v || v.ended || matchMedia('(prefers-reduced-motion: reduce)').matches) return run();
       v.addEventListener('ended', () => setTimeout(run, 400), { once: true });
       setTimeout(run, 15000);
     };
@@ -665,7 +675,15 @@ if (ctaHost && ctaSec && window.WebGLRenderingContext && innerWidth >= 760) {   
 // ---------- inner pages: a few glass objects live over the whole page (fixed to the viewport),
 // fleeing the cursor like the homepage and drifting with the scroll
 const pageHost = document.getElementById('pageGlass');
-if (pageHost && window.WebGLRenderingContext) {
+if (pageHost && window.WebGLRenderingContext && PHONE) {
+  // phones: three baked glass icons pinned to the page (left / right / left), no live scene
+  const names = ['heart', 'rocket', 'asterisk'];
+  names.forEach((n, i) => { const b = document.createElement('b'); b.className = 'pg-gem'; b.style.top = (22 + i * 28) + '%'; b.style[i % 2 ? 'right' : 'left'] = '6%'; b.innerHTML = `<i class="gem" style="--g:var(--gem-${n});animation-delay:${(-i * 1.1).toFixed(1)}s"></i>`; pageHost.appendChild(b); });
+  const fit = () => { pageHost.style.height = document.documentElement.scrollHeight + 'px'; };
+  fit(); addEventListener('load', fit); addEventListener('resize', fit); setTimeout(fit, 2000);
+  pageHost.classList.add('is-on');
+  try { init({ host: pageHost, area: document.body, hero: false, bakeOnly: true, titleSel: '.__none', titleEl: null, video: null, count: 0 }); } catch (e) {}
+} else if (pageHost && window.WebGLRenderingContext) {
   const small = innerWidth < 760;
   try {
     init({
