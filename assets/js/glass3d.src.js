@@ -18,7 +18,7 @@ if (heroHost && heroSec && window.WebGLRenderingContext) {
 
 // ---------- the finale: the same glass emojis rise up with the scroll and stay for the footer
 const finHost = document.getElementById('finaleGlass'), finSec = document.getElementById('contact');
-if (finHost && finSec && window.WebGLRenderingContext) {
+if (finHost && finSec && window.WebGLRenderingContext && innerWidth >= 901) {   // phones show the inner-page CTA instead
   let started = false;
   const smooth = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); };
   const start = () => {
@@ -53,8 +53,8 @@ function init(cfg) {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
   } catch (e) { document.documentElement.classList.add('gem-fail'); return; }
   const MOB = innerWidth < 760 || matchMedia('(pointer:coarse)').matches;
-  renderer.setPixelRatio(MOB ? 1 : Math.min(devicePixelRatio, 1.5));          // sharp enough for glass, far cheaper than 2x; phones render at 1x
-  if ('transmissionResolutionScale' in renderer) renderer.transmissionResolutionScale = MOB ? 0.35 : 0.5;   // refraction buffer at half res (lower on phones)
+  renderer.setPixelRatio(Math.min(devicePixelRatio, MOB ? 2 : 1.5));          // phones keep their native sharpness; the frame cap below keeps the cost down
+  if ('transmissionResolutionScale' in renderer) renderer.transmissionResolutionScale = 0.5;   // refraction buffer at half res
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -469,7 +469,7 @@ function init(cfg) {
     if (!visible || document.hidden) return;
     if (warmDone && document.documentElement.classList.contains('intro-1')) { requestAnimationFrame(tick); return; }
     const active = drag || now - lastInput < 1500 || glyphsDirty;
-    if ((!active || MOB) && now - lastDraw < 32) { requestAnimationFrame(tick); return; }   // idle: ~30fps is plenty for a slow float; phones always cap at 30 so scrolling stays smooth
+    if ((!active || MOB) && now - lastDraw < (MOB ? 40 : 32)) { requestAnimationFrame(tick); return; }   // idle: ~30fps is plenty for a slow float; phones cap at ~25 so scrolling stays smooth
     lastDraw = now;
     const dt = Math.min(0.05, (now - last) / 1000); last = now; const t = now / 1000;
     const nx = pointer.x / W - 0.5, ny = pointer.y / H - 0.5;
@@ -548,7 +548,7 @@ function init(cfg) {
   function bakeGems() {
     const BIG = new Set((document.documentElement.dataset.gemBig || '').split(',').filter(Boolean));
     const F = 24, mob = innerWidth < 760;
-    const sizeFor = n => BIG.has(n) ? (mob ? 220 : 300) : (mob ? 120 : 160);
+    const sizeFor = n => BIG.has(n) ? (mob ? 360 : 300) : (mob ? 220 : 160);   // phones bake larger: the strips are shown on a 3x screen
     let r2;
     const start = () => {
       try {

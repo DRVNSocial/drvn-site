@@ -870,6 +870,7 @@
     // "Start project" links land on the finished lock-up
     $$('a[href="#contact"]').forEach(a => a.addEventListener('click', e => {
       e.preventDefault(); nav?.classList.remove('is-open'); document.documentElement.classList.remove('is-menu-open');
+      const alt = $('.pfoot--home'); if (alt && getComputedStyle(sec).display === 'none') { alt.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
       const r = sec.getBoundingClientRect(); scrollTo({ top: scrollY + r.top + r.height - innerHeight, behavior: reduce ? 'auto' : 'smooth' });
     }));
   })();
@@ -973,14 +974,16 @@
 
   /* footer clock — live time in South Wales (Europe/London, so it flips to BST automatically) */
   (() => {
-    const el = $('#clock'); if (!el) return;
-    const h = $('[data-h]', el), m = $('[data-m]', el), sx = $('[data-s]', el), z = $('[data-z]', el);
+    const els = $$('.clock__t'); if (!els.length) return;   // every clock on the page (the homepage has one per CTA variant)
     const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZoneName: 'short' });
     const tick = () => {
       const p = Object.fromEntries(fmt.formatToParts(new Date()).map(x => [x.type, x.value]));
-      h.textContent = p.hour === '24' ? '00' : p.hour; m.textContent = p.minute; sx.textContent = p.second;
-      z.textContent = (p.timeZoneName || 'GMT').replace('GMT+1', 'BST');
-      el.classList.add('is-tick'); setTimeout(() => el.classList.remove('is-tick'), 350);
+      els.forEach(el => {
+        const h = $('[data-h]', el), m = $('[data-m]', el), sx = $('[data-s]', el), z = $('[data-z]', el); if (!h) return;
+        h.textContent = p.hour === '24' ? '00' : p.hour; m.textContent = p.minute; sx.textContent = p.second;
+        z.textContent = (p.timeZoneName || 'GMT').replace('GMT+1', 'BST');
+        el.classList.add('is-tick'); setTimeout(() => el.classList.remove('is-tick'), 350);
+      });
       setTimeout(tick, 1000 - (Date.now() % 1000) + 5);
     };
     tick();

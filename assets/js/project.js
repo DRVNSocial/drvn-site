@@ -99,12 +99,13 @@
         } else t0 = now - (parseFloat(bars.children[i].querySelector('i').style.getPropertyValue('--p')) || 0) * DUR;
         requestAnimationFrame(tick);
       };
-      $$('.pj-car__hit', car).forEach(h => h.addEventListener('click', () => go(i + +h.dataset.dir)));
-      car.tabIndex = 0;
+      let swiped = 0;
+      $$('.pj-car__hit', car).forEach(h => h.addEventListener('click', () => { if (performance.now() - swiped < 400) return; go(i + +h.dataset.dir); }));
+      car.tabIndex = -1;
       car.addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(i + 1); if (e.key === 'ArrowLeft') go(i - 1); });
       let sx = null;
       car.addEventListener('pointerdown', e => { sx = e.clientX; });
-      car.addEventListener('pointerup', e => { if (sx !== null && Math.abs(e.clientX - sx) > 50) go(i + (e.clientX < sx ? 1 : -1)); sx = null; });
+      car.addEventListener('pointerup', e => { if (sx !== null && Math.abs(e.clientX - sx) > 50) { swiped = performance.now(); go(i + (e.clientX < sx ? 1 : -1)); } sx = null; });
       new IntersectionObserver(([e]) => { vis = e.isIntersecting; }, { threshold: .4 }).observe(car);
       go(0); requestAnimationFrame(tick);
     } else bars.remove();
