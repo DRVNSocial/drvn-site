@@ -390,11 +390,10 @@
     const onHome = /(^|\/)(index\.html)?$/.test(location.pathname);
     if (onHome) { e.preventDefault(); scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); history.replaceState(null, '', location.pathname); }
   });
-  $('#navBurger')?.addEventListener('click', () => {
-    const open = nav.classList.toggle('is-open');
-    $('#navBurger').setAttribute('aria-expanded', open);
-  });
-  $$('.nav__sheet a').forEach(a => a.addEventListener('click', () => nav.classList.remove('is-open')));
+  const setMenu = open => { nav.classList.toggle('is-open', open); document.documentElement.classList.toggle('is-menu-open', open); $('#navBurger')?.setAttribute('aria-expanded', open); $('#navBurger')?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu'); };
+  $('#navBurger')?.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
+  $$('.nav__sheet a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  matchMedia('(min-width:901px)').addEventListener?.('change', e => { if (e.matches) setMenu(false); });
 
   /* ---------------------------------------------------------
      HERO STICKERS — parallax, cursor repel, drag & fling, pop
@@ -745,7 +744,7 @@
   $('#playReel')?.addEventListener('click', () => { modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); reel.currentTime = 0; reel.play().catch(() => {}); });
   $('#reelClose')?.addEventListener('click', closeReel);
   modal?.addEventListener('click', e => { if (e.target === modal) closeReel(); });
-  addEventListener('keydown', e => { if (e.key === 'Escape') { closeReel(); nav.classList.remove('is-open'); } });
+  addEventListener('keydown', e => { if (e.key === 'Escape') { closeReel(); nav.classList.remove('is-open'); document.documentElement.classList.remove('is-menu-open'); } });
 
   /* =========================================================
      CLIENT STRIP — name pill follows the cursor over a logo
@@ -861,7 +860,7 @@
     }, { rootMargin: '200px 0px' }).observe(sec);
     // "Start project" links land on the finished lock-up
     $$('a[href="#contact"]').forEach(a => a.addEventListener('click', e => {
-      e.preventDefault(); nav?.classList.remove('is-open');
+      e.preventDefault(); nav?.classList.remove('is-open'); document.documentElement.classList.remove('is-menu-open');
       const r = sec.getBoundingClientRect(); scrollTo({ top: scrollY + r.top + r.height - innerHeight, behavior: reduce ? 'auto' : 'smooth' });
     }));
   })();
@@ -913,8 +912,9 @@
       for (let i = 3; i < d.data.length; i += 4) d.data[i] = Math.random() * 0.1 * 255;   // black, alpha 0–0.1 (half the MacMillan strength)
       x.putImageData(d, 0, 0); tiles.push(cx.createPattern(c, 'repeat'));
     }
-    const size = () => { cv.width = innerWidth; cv.height = innerHeight; };   // 1 noise dot per CSS pixel
-    size(); addEventListener('resize', size);
+    const size = () => { const r = cv.getBoundingClientRect(); cv.width = Math.ceil(r.width || innerWidth); cv.height = Math.ceil(Math.max(r.height, innerHeight, (visualViewport && visualViewport.height) || 0)); };   // 1 noise dot per CSS pixel, sized to the full (large) viewport so iOS toolbars never leave a gap
+    size(); addEventListener('resize', size); addEventListener('orientationchange', () => setTimeout(size, 300));
+    const FRAME = innerWidth < 900 ? 80 : 33;   // phones: ~12fps is plenty for grain and leaves the GPU for scrolling
     let k = 0, last = 0;
     const draw = () => {
       k = (k + 1 + (Math.random() * (tiles.length - 1) | 0)) % tiles.length;
@@ -923,7 +923,7 @@
     };
     draw();
     if (reduce) return;
-    const loop = now => { if (document.hidden) return; if (now - last > 33) { last = now; draw(); } requestAnimationFrame(loop); };
+    const loop = now => { if (document.hidden) return; if (now - last > FRAME) { last = now; draw(); } requestAnimationFrame(loop); };
     requestAnimationFrame(loop);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(loop); });
   })();

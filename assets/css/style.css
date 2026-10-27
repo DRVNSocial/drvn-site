@@ -1770,3 +1770,90 @@ img{max-width:100%;height:auto}
 
 /* phones: keep the nav refraction halo inside the viewport */
 @media (max-width:640px){.nav__refract{inset:-10px;padding:10px}}
+
+/* =========================================================
+   MOBILE PASS 2 — fixes from the first phone walkthrough (iPhone 16 Pro)
+   ========================================================= */
+/* split-text: italic glyphs overhang their box; give each letter room so Safari never trims the right edge mid-animation */
+.split .ch{padding-right:.12em;margin-right:-.12em}
+/* the headline must not flash in plain before the opening sequence types it in */
+html.intro .hero__title:not(.is-in){visibility:hidden}
+/* film noise: cover the whole screen on phones, including behind the toolbars and the rounded corners */
+.page-noise{inset:0;width:100%;height:100vh;height:100lvh}
+/* burger: just the two lines, no circle */
+.nav__burger{background:none;box-shadow:none}
+
+@media (max-width:900px){
+  /* full-screen black menu: big N27 items, centred, Start Project as the real button */
+  .nav__sheet{position:fixed;inset:0;top:0;left:0;right:0;bottom:0;height:100dvh;z-index:-1;padding:0 var(--gutter);border-radius:0;background:#0a0a0a;
+    -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;justify-content:center;align-items:center;gap:6px;
+    opacity:0;transform:none;visibility:hidden;transition:opacity .45s var(--ease),visibility 0s linear .45s}
+  .nav.is-open .nav__sheet{opacity:1;visibility:visible;transition:opacity .45s var(--ease),visibility 0s}
+  .nav__sheet a{padding:10px 0;border:0;text-align:center;font-size:clamp(44px,14vw,72px);line-height:.92;letter-spacing:var(--track-l,-.025em);
+    opacity:0;transform:translateY(18px);transition:opacity .5s var(--ease),transform .7s var(--ease-out)}
+  .nav.is-open .nav__sheet a{opacity:1;transform:none}
+  .nav.is-open .nav__sheet a:nth-child(1){transition-delay:.08s}.nav.is-open .nav__sheet a:nth-child(2){transition-delay:.14s}
+  .nav.is-open .nav__sheet a:nth-child(3){transition-delay:.2s}.nav.is-open .nav__sheet a:nth-child(4){transition-delay:.3s}
+  .nav__sheet .nav__cta{display:inline-flex;margin:28px 0 0;height:60px;padding:0 26px 0 30px;font-size:16px;line-height:1.15;letter-spacing:var(--track-s);border:0}
+  .nav__sheet .nav__cta .cta__plus{width:15px;height:15px}
+  .nav.is-open .nav__glass{background:transparent}
+  html.is-menu-open,html.is-menu-open body{overflow:hidden}
+
+  /* latest-work panels: stats stacked, tags pinned top-right (stacked when there are two), logo smaller,
+     and nothing fades in until the panel has finished resizing */
+  .lw__top{top:18px;left:18px;right:auto;max-width:50%}
+  .lw__logo{height:22px}
+  .lw__wordmark{font-size:15px}
+  .lw__tags,.lw__panel.d0 .lw__tags{display:flex;flex-direction:column;align-items:flex-end;gap:5px;top:18px;right:18px;left:auto;bottom:auto;max-width:46%}
+  .lw__tags li{font-size:10px;padding:5px 10px 4px;white-space:normal;text-align:right;line-height:1.2}
+  .lw__stats{left:18px;right:18px;bottom:20px;flex-direction:column;row-gap:12px;white-space:normal}
+  .lw__stat{padding:0;border-left:0;gap:3px}
+  .lw__stat b{font-size:clamp(28px,8vw,34px)}
+  .lw__stat span{font-size:10px}
+  .lw__panel.d0 .lw__top,.lw__panel.d0 .lw__stats,.lw__panel.d0 .lw__tags{transition-delay:.95s}
+  .lw__panel:not(.d0) .lw__top,.lw__panel:not(.d0) .lw__stats,.lw__panel:not(.d0) .lw__tags{transition:opacity .2s var(--ease);transform:none}
+
+  /* buttons keep their natural width in stacked header rows */
+  .ins__head,.mod__head--row,.section-head--row{align-items:flex-start}
+  .ins__head .btn,.mod__head--row .btn,.section-head--row .btn,.skills__in .btn,
+  .ins__head .gbtn,.mod__head--row .gbtn,.section-head--row .gbtn,.skills__in .gbtn,
+  .ins__head .nav__cta,.mod__head--row .nav__cta,.section-head--row .nav__cta,.skills__in .nav__cta{align-self:flex-start;justify-self:start;width:auto}
+
+  /* footer bar: contact details stacked on the left, time + place bottom right */
+  .finale__bar{grid-template-columns:1fr auto;grid-template-areas:"brand brand" "links clock";align-items:end}
+  .finale__bar .finale__brand{grid-area:brand}
+  .finale__bar .finale__links{grid-area:links;grid-column:auto;grid-row:auto;flex-direction:column;align-items:flex-start;gap:14px;text-align:left}
+  .finale__bar .clock{grid-area:clock;align-self:end;text-align:right}
+  .finale__bar .clock .footer__k{display:block;margin-bottom:3px}
+
+  /* about: taller image frame, stacked service lists, process stacks image → title → copy */
+  .ab-hero__media{aspect-ratio:4/5}
+  .skills__in{grid-template-columns:1fr}
+  .skills__cols{grid-template-columns:1fr;gap:8px}
+  .stages{height:calc(100svh * 5 + 200vh)}
+  .stages__pin{height:100svh;padding-top:88px;grid-template-rows:auto 1fr;gap:16px}
+  .stage{grid-template-rows:auto 1fr;gap:18px;align-content:start}
+  .stage__img{height:min(42svh,380px);max-height:none}
+  .stage__copy{grid-template-columns:1fr;align-content:start;gap:10px}
+  .stage__copy>*{grid-column:1}
+  .stage__copy .step__n{order:0}.stage__copy h3{order:1;font-size:clamp(34px,10.5vw,44px)}.stage__copy .step__k{order:2}.stage__copy p{order:3;font-size:15.5px}
+
+  /* project pages: client / sector box first, then the brief; photography gets a taller frame */
+  .pj-brief__grid{gap:36px}
+  .pj-side{order:-1}
+  .pj-car{aspect-ratio:4/5}
+  .pj-rel .mod__head--row .gbtn{width:auto}
+
+  /* contact: the form gets its own heading once it stacks under the details */
+  .cform__head{display:block;margin:0 0 6px}
+}
+@media (max-width:760px){
+  /* testimonial timer above the quote, where it can be seen whatever the review length */
+  .testi .wrap{display:flex;flex-direction:column}
+  .testi__head{order:0}
+  .testi__bars{order:1;margin:0 0 26px}
+  .testi__stage{order:2}
+  /* "Let's make some noise" the same size on every page as the homepage finale */
+  .pfoot__in .glow-title{font-size:min(12vw,7.5vh)}
+}
+@media (min-width:901px){.cform__head{display:none}}
