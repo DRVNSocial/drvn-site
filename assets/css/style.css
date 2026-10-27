@@ -1775,7 +1775,7 @@ img{max-width:100%;height:auto}
    MOBILE PASS 2 — fixes from the first phone walkthrough (iPhone 16 Pro)
    ========================================================= */
 /* split-text: italic glyphs overhang their box; give each letter room so Safari never trims the right edge mid-animation */
-.split .ch{padding-right:.12em;margin-right:-.12em}
+.split .ch{padding-right:.22em;margin-right:-.22em}
 /* the headline must not flash in plain before the opening sequence types it in */
 html.intro .hero__title:not(.is-in){visibility:hidden}
 /* film noise: cover the whole screen on phones, including behind the toolbars and the rounded corners */
@@ -1963,3 +1963,16 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
   .lw__wordmark{font-size:17px}
   .lw__top{max-width:52%}
 }
+
+/* pass 8 */
+.gbtn .btn__play svg{width:11px;height:11px}
+@media (max-width:900px){
+  .gbtn .btn__play{width:32px;height:32px}
+  .gbtn .btn__play svg{width:14px;height:14px}
+  /* every page's CTA: same full-screen lock-up, copy centred, footer bar flush at the bottom */
+  .pfoot{min-height:100svh;padding-bottom:0}
+  .pfoot__in{flex:1;align-content:center;padding:96px 0 48px}
+  .pfoot .finale__bar{margin-top:0}
+  .cform__head .pj-h{max-width:none}
+}
+@media (max-width:900px){.pfoot--bar{min-height:0;display:block;padding-top:0}}

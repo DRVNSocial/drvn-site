@@ -190,13 +190,13 @@
       const chars = $$('.ch, .sp', el);
       chars.forEach((c, i) => {
         const n = chars[i + 1];
-        // each letter carries .12em of right padding (room for the italic overhang while it animates, see .split .ch);
+        // each letter carries .22em of right padding (room for the italic overhang while it animates, see .split .ch);
         // the margin takes that back out again so the advance width is unchanged
         if (!c.classList.contains('ch')) { c.style.marginRight = ''; return; }
-        if (!n || !n.classList.contains('ch')) { c.style.marginRight = '-.12em'; return; }
+        if (!n || !n.classList.contains('ch')) { c.style.marginRight = '-.22em'; return; }
         const a = c.textContent.toUpperCase(), b = n.textContent.toUpperCase();
         const k = w(a + b) - w(a) - w(b);                    // negative = pull together
-        c.style.marginRight = (k / 200 - 0.12).toFixed(4) + 'em';
+        c.style.marginRight = (k / 200 - 0.22).toFixed(4) + 'em';
       });
     });
   }

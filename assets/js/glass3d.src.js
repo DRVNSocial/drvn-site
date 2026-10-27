@@ -679,8 +679,8 @@ if (pageHost && window.WebGLRenderingContext && PHONE) {
   // phones: three baked glass icons pinned to the page (left / right / left), no live scene
   const names = ['heart', 'rocket', 'asterisk'];
   names.forEach((n, i) => { const b = document.createElement('b'); b.className = 'pg-gem'; b.style.top = (22 + i * 28) + '%'; b.style[i % 2 ? 'right' : 'left'] = '6%'; b.innerHTML = `<i class="gem" style="--g:var(--gem-${n});animation-delay:${(-i * 1.1).toFixed(1)}s"></i>`; pageHost.appendChild(b); });
-  const fit = () => { pageHost.style.height = document.documentElement.scrollHeight + 'px'; };
-  fit(); addEventListener('load', fit); addEventListener('resize', fit); setTimeout(fit, 2000);
+  const fit = () => { pageHost.style.height = '0px'; pageHost.style.height = document.documentElement.scrollHeight + 'px'; };   // measure without itself, so it can never add space below the footer
+  fit(); addEventListener('load', fit); addEventListener('resize', fit); setTimeout(fit, 2000); setTimeout(fit, 5000); document.fonts?.ready.then(fit);
   pageHost.classList.add('is-on');
   try { init({ host: pageHost, area: document.body, hero: false, bakeOnly: true, titleSel: '.__none', titleEl: null, video: null, count: 0 }); } catch (e) {}
 } else if (pageHost && window.WebGLRenderingContext) {
