@@ -1834,7 +1834,6 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
   .stages__pin{height:100svh;padding-top:88px;grid-template-rows:auto 1fr;gap:16px}
   .stage{grid-template-rows:auto 1fr;gap:18px;align-content:start}
   .stage__img{height:min(42svh,380px);max-height:none}
-  .stage__img--phones{height:min(30svh,260px)}
   .stages__pct{display:none}
   .stage__copy{grid-template-columns:1fr;align-content:start;gap:10px}
   .stage__copy>*{grid-column:1}
@@ -1873,5 +1872,41 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
   .services .section-head .eyebrow{margin-bottom:0}
   /* insight → finale: pull the first stat up so the page doesn't look finished */
   .ins{padding-bottom:28px}
-  .fstat{top:40%}
+}
+
+/* pass 4 */
+/* glass buttons: the label never wraps (it was folding onto a hidden second line and leaving a gap) */
+.gbtn,.gbtn__label,.tab__roll{white-space:nowrap}
+/* testimonials: one Google rating lock-up at the top is enough */
+.tq__g{display:none}
+/* work cards: count-ups must not reflow the copy beside them */
+.wc__stat b,.lw__stat b,.cs-stats b,.pj-stats b{font-variant-numeric:tabular-nums}
+/* founders heading: same size as every other page title */
+.founders__h{font-size:clamp(40px,6vw,96px)}
+/* about copy: paragraphs arrive one after another */
+.who-we-are__copy p:nth-child(2){transition-delay:.12s}.who-we-are__copy p:nth-child(3){transition-delay:.24s}
+/* contact form: fields arrive one by one */
+.cform .field[data-reveal]{transform:translateY(24px)}
+.cform .field[data-reveal]:nth-child(2){transition-delay:.1s}
+/* band: continuous marquee on phones (the scroll-linked version stuttered) */
+@keyframes bandMarq{to{transform:translate3d(-50%,0,0)}}
+.band__row--marq{animation:bandMarq var(--dur,26s) linear infinite}
+.band__row--marq.is-rev{animation-direction:reverse}
+@media (max-width:900px){
+  .manifesto__pin{padding-top:96px}
+  .stages__pin{padding-top:112px}
+  .stage__img,.stage__img--phones{height:min(40svh,360px)}
+  .stage__img--phones .fphone,.stage__img--float .fphone{--w:min(25vw,108px)}
+  .stage[data-i="0"] .sphones .fphone{margin-top:calc(var(--w) * -1.055)}
+  .stage__img--float .fl1{left:3%;top:6%}
+  .stage__img--float .fl2{top:16%}
+  .stage__img--float .fl3{right:7%;bottom:8%}
+  .finale__bar{padding-top:12px;padding-bottom:12px;align-items:end}
+  .finale__bar .finale__links{gap:10px}
+  .finale__bar .clock{align-self:end;line-height:1}
+  .finale__bar .clock .footer__k{margin-bottom:2px}
+  .finale__bar .clock__t{font-size:18px}
+  /* inner-page CTA: lands as a full-screen lock-up with the footer bar at the very bottom */
+  .pfoot{display:flex;flex-direction:column;min-height:100svh;padding-top:0}
+  .pfoot__in{flex:1;align-content:center;padding:96px 0 40px}
 }

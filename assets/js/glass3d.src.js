@@ -385,7 +385,7 @@ function init(cfg) {
     objs.push({
       name, g, mesh, slot: SLOTS[i], depth: 0.6 + Math.random() * 0.8, phase: Math.random() * 6.28,
       scale: 0.9 + Math.random() * 0.3,
-      spin: new THREE.Vector3((Math.random() - .5) * 0.2, (Math.random() > .5 ? 1 : -1) * (0.25 + Math.random() * 0.2), 0), // idle rad/s
+      spin: new THREE.Vector3((Math.random() - .5) * 0.2, (Math.random() > .5 ? 1 : -1) * (0.25 + Math.random() * 0.2), 0).multiplyScalar(MOB ? 0.5 : 1), // idle rad/s (gentler on phones)
       av: new THREE.Vector3(),      // angular velocity from interaction (rad/s)
       pop: 0, hover: 0, p: { x: 0, y: 0 }, v: { x: 0, y: 0 }, home: { x: 0, y: 0 }, placed: false
     });
@@ -639,7 +639,7 @@ function init(cfg) {
 // ---------- inner pages: the closing CTA gets its own glass emojis that rise up from the bottom
 // of the page as "Let's make some noise" arrives, then float around the button (same idea as the homepage finale)
 const ctaHost = document.getElementById('pfootGlass'), ctaSec = ctaHost && ctaHost.closest('.pfoot');
-if (ctaHost && ctaSec && window.WebGLRenderingContext) {
+if (ctaHost && ctaSec && window.WebGLRenderingContext && innerWidth >= 760) {   // phones skip the CTA instance: a third WebGL scene is what made the footer stutter
   let started = false;
   const smooth = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); };
   const start = () => {
@@ -670,8 +670,8 @@ if (pageHost && window.WebGLRenderingContext) {
   try {
     init({
       host: pageHost, area: document.body, hero: false, titleSel: '.__none', titleEl: null, video: null, snap: true,
-      count: small ? 5 : 8, page: true,
-      zones: Array.from({ length: small ? 5 : 8 }, (_, i) => { const n = small ? 5 : 8; return { x0: i % 2 ? .7 : .04, x1: i % 2 ? .96 : .3, y0: (i + .15) / n, y1: (i + .85) / n }; })
+      count: small ? 3 : 8, page: true,
+      zones: Array.from({ length: small ? 3 : 8 }, (_, i) => { const n = small ? 3 : 8; return { x0: i % 2 ? .7 : .04, x1: i % 2 ? .96 : .3, y0: (i + .15) / n, y1: (i + .85) / n }; })
     });
     pageHost.classList.add('is-on');
   } catch (e) { pageHost.dataset.g3dError = e.message; console.error('glass3d page', e); }

@@ -575,6 +575,8 @@
     });
   }, { passive: true });
   const manifesto = $('#manifesto'), bandRows = $$('.band__row'), bandEmojis = $$('.band__emoji');
+  // phones: the scroll-linked band stuttered, so it becomes a continuous marquee (content doubled for a seamless loop)
+  if (innerWidth < 900) bandRows.forEach(row => { row.innerHTML += row.innerHTML; row.classList.add('band__row--marq'); if (+row.dataset.speed < 0) row.classList.add('is-rev'); row.style.setProperty('--dur', (row.scrollWidth / 90).toFixed(1) + 's'); });
   const lightSecs = $$('[data-nav="light"]');
   const navLogo = $('#navLogo'), logoSocial = $('#logoSocial');
   // scroll-spy: only tabs that point at a section on this page
@@ -621,6 +623,7 @@
 
       // kinetic band: scroll-linked horizontal motion
       bandRows.forEach(row => {
+        if (row.classList.contains('band__row--marq')) return;   // phones: CSS marquee instead
         const r = row.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
         const p = (vh - r.top) / (vh + r.height);
@@ -648,7 +651,7 @@
     const n = e.target.querySelector('[data-count]');
     if (n) countUp(n);
     io.unobserve(e.target);
-  }), { threshold: .2, rootMargin: '0px 0px -8% 0px' });
+  }), { threshold: innerWidth < 900 ? .08 : .2, rootMargin: '0px 0px -6% 0px' });
   $$('[data-reveal], .cta__title .split').forEach(el => io.observe(el));
 
   function countUp(el) {
@@ -674,6 +677,9 @@
       el.style.fontVariantNumeric = 'tabular-nums';
       return it;
     }).filter(Boolean);
+    // reserve each number's final width (measured once the display font is in) so the copy beside it never reflows
+    const lock = () => items.forEach(it => { if (it.done) return; const el = it.el, cur = el.textContent; el.textContent = it.pre + fmt(it, it.end) + it.suf; const w = el.getBoundingClientRect().width; el.textContent = cur; if (w) { if (getComputedStyle(el).display === 'inline') el.style.display = 'inline-block'; el.style.minWidth = Math.ceil(w) + 'px'; } });
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(lock);
     function fmt(it, v) {
       if (it.dec) return v.toFixed(it.dec);
       const r = Math.round(v);

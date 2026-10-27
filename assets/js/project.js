@@ -81,6 +81,8 @@
   const car = $('#pjCar');
   if (car) {
     const imgs = $$('.pj-car__img', car), bars = $('.pj-car__bars', car), cnt = $('.pj-car__count b', car), DUR = 2800;
+    // decode every slide up front: a tap to the next photo must never flash the empty frame while it loads
+    imgs.forEach(el => { const m = /url\(["']?([^"')]+)/.exec(el.style.backgroundImage); if (m) { const im = new Image(); im.src = m[1]; } });
     if (imgs.length > 1) {
       imgs.forEach((_, k) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = '<i></i>'; b.setAttribute('aria-label', 'Photo ' + (k + 1)); b.addEventListener('click', () => go(k)); bars.appendChild(b); });
       let i = 0, t0 = performance.now(), vis = false;
