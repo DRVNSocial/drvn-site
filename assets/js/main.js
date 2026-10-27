@@ -190,10 +190,13 @@
       const chars = $$('.ch, .sp', el);
       chars.forEach((c, i) => {
         const n = chars[i + 1];
-        if (!c.classList.contains('ch') || !n || !n.classList.contains('ch')) { c.style.marginRight = ''; return; }
+        // each letter carries .12em of right padding (room for the italic overhang while it animates, see .split .ch);
+        // the margin takes that back out again so the advance width is unchanged
+        if (!c.classList.contains('ch')) { c.style.marginRight = ''; return; }
+        if (!n || !n.classList.contains('ch')) { c.style.marginRight = '-.12em'; return; }
         const a = c.textContent.toUpperCase(), b = n.textContent.toUpperCase();
         const k = w(a + b) - w(a) - w(b);                    // negative = pull together
-        c.style.marginRight = (k / 200).toFixed(4) + 'em';
+        c.style.marginRight = (k / 200 - 0.12).toFixed(4) + 'em';
       });
     });
   }
@@ -831,7 +834,7 @@
       });
       // stats: one at a time, each owns an equal slice of the run. The first starts while the section is
       // still scrolling into view (insight about halfway out of frame), so the screen never sits empty
-      const S0 = -(vh * .5) / Math.max(1, r.height - vh), W = (RUN - .03 - S0) / stats.length;
+      const S0 = -(vh * (innerWidth < 900 ? .7 : .5)) / Math.max(1, r.height - vh), W = (RUN - .03 - S0) / stats.length;   // phones: first stat starts earlier
       stats.forEach((s, i) => {
         const t = (p - S0 - i * W) / W;                           // 0 → 1 across this stat's slice
         const fin = smooth(t / .22), fout = i === stats.length - 1 ? smooth((t - .78) / .22) : smooth((t - .8) / .2);
