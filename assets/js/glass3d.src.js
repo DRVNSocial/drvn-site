@@ -649,6 +649,10 @@ function init(cfg) {
 // ---------- inner pages: the closing CTA gets its own glass emojis that rise up from the bottom
 // of the page as "Let's make some noise" arrives, then float around the button (same idea as the homepage finale)
 const ctaHost = document.getElementById('pfootGlass'), ctaSec = ctaHost && ctaHost.closest('.pfoot');
+if (PHONE) document.querySelectorAll('.pfoot__glass').forEach((h, k) => {   // phones: two baked icons either side of the CTA, no live scene
+  ['rocket', 'heart'].forEach((n, i) => { const b = document.createElement('b'); b.className = 'pf-gem pf-gem--' + (i + 1); b.innerHTML = `<i class="gem" style="--g:var(--gem-${n});animation-delay:${(-i * 1.3).toFixed(1)}s"></i>`; h.appendChild(b); });
+  h.classList.add('is-on');
+});
 if (ctaHost && ctaSec && window.WebGLRenderingContext && innerWidth >= 760) {   // phones skip the CTA instance: a third WebGL scene is what made the footer stutter
   let started = false;
   const smooth = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); };

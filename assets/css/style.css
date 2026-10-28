@@ -1976,3 +1976,22 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
   .cform__head .pj-h{max-width:none}
 }
 @media (max-width:900px){.pfoot--bar{min-height:0;display:block;padding-top:0}}
+
+/* phones: baked icons arrive with a pop instead of just appearing */
+@keyframes gemIn{from{opacity:0;transform:translateY(46px) scale(.55) rotate(-14deg)}60%{opacity:1}to{opacity:1;transform:none}}
+@media (max-width:900px){
+  .hero__gem{opacity:0}
+  html.gem-ready:not(.intro) .hero__gem,html.gem-ready.intro-4 .hero__gem{animation:gemIn .9s cubic-bezier(.2,.9,.25,1.12) both,gemFloat 5.5s ease-in-out .9s infinite alternate}
+  html.gem-ready:not(.intro) .hero__gem.g2,html.gem-ready.intro-4 .hero__gem.g2{animation-delay:.14s,1.04s}
+  html.gem-ready:not(.intro) .hero__gem.g3,html.gem-ready.intro-4 .hero__gem.g3{animation-delay:.28s,1.18s}
+  .pfoot__glass.is-on{opacity:1}
+  .pf-gem{position:absolute;width:118px;height:118px;opacity:0}
+  .pf-gem--1{left:4%;top:9%}
+  .pf-gem--2{right:3%;top:16%;width:98px;height:98px}
+  html.gem-ready .pfoot.is-in .pf-gem{animation:gemIn .9s cubic-bezier(.2,.9,.25,1.12) both,gemFloat 6s ease-in-out .9s infinite alternate}
+  html.gem-ready .pfoot.is-in .pf-gem--2{animation-delay:.16s,1.06s}
+}
+
+/* ---- showreel button: no reel yet, so hover/tap rolls the label to "Coming soon" ---- */
+.gbtn.is-alt .tab__roll span{transform:translateY(-100%)}
+.gbtn[aria-disabled="true"]{cursor:default}

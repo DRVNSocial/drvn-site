@@ -354,7 +354,7 @@
   $$('.btn--glass, .btn--line').forEach(b => {
     const l = labelOf(b), icon = b.querySelector('.btn__play');
     b.classList.remove('btn', 'btn--glass', 'btn--line'); b.classList.add('gbtn'); b.removeAttribute('data-cursor');
-    b.innerHTML = `<span class="nav__refract" aria-hidden="true"></span><span class="nav__sheen" aria-hidden="true"></span><span class="nav__rim" aria-hidden="true"></span><span class="nav__frost" aria-hidden="true"></span>${icon ? icon.outerHTML : ''}<span class="gbtn__label"><span class="tab__roll"><span>${l}</span><span aria-hidden="true">${l}</span></span></span>`;
+    b.innerHTML = `<span class="nav__refract" aria-hidden="true"></span><span class="nav__sheen" aria-hidden="true"></span><span class="nav__rim" aria-hidden="true"></span><span class="nav__frost" aria-hidden="true"></span>${icon ? icon.outerHTML : ''}<span class="gbtn__label"><span class="tab__roll"><span>${l}</span><span aria-hidden="true">${b.dataset.alt || l}</span></span></span>`;
     b.addEventListener('pointermove', e => {
       const r = b.getBoundingClientRect(), lx = e.clientX - r.left, ly = e.clientY - r.top;
       b.style.setProperty('--mx', lx + 'px'); b.style.setProperty('--my', ly + 'px');
@@ -751,12 +751,10 @@
   /* ---------------------------------------------------------
      REEL MODAL
      --------------------------------------------------------- */
-  const modal = $('#reelModal'), reel = $('#reelVideo');
-  const closeReel = () => { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); reel.pause(); };
-  $('#playReel')?.addEventListener('click', () => { modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); reel.currentTime = 0; reel.play().catch(() => {}); });
-  $('#reelClose')?.addEventListener('click', closeReel);
-  modal?.addEventListener('click', e => { if (e.target === modal) closeReel(); });
-  addEventListener('keydown', e => { if (e.key === 'Escape') { closeReel(); nav.classList.remove('is-open'); document.documentElement.classList.remove('is-menu-open'); } });
+  // showreel: the new reel is in the edit, so the button stays but rolls to "Coming soon" (hover on desktop, tap on touch)
+  const reelBtn = $('#playReel');
+  if (reelBtn) { let t; reelBtn.addEventListener('click', e => { e.preventDefault(); reelBtn.classList.add('is-alt'); clearTimeout(t); t = setTimeout(() => reelBtn.classList.remove('is-alt'), 1600); }); }
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
   /* =========================================================
      CLIENT STRIP — name pill follows the cursor over a logo

@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=34">
+<link rel="stylesheet" href="assets/css/style.css?v=36">
 <script>
   /* opening sequence: arm before first paint so nothing flashes */
   (function () {
@@ -115,7 +115,7 @@
       <p class="hero__lede">We're a data-driven social agency with a film crew's eye and a scroller's instinct. High-end production, made for the feed and backed by the numbers. From a single paid ad to a full YouTube series, <em>everything we make is built to perform.</em></p>
       <div class="hero__actions">
         <a href="#latest" class="btn btn--light" data-cursor="Explore">See the work</a>
-        <button class="btn btn--glass" id="playReel" data-cursor="Play"><span class="btn__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span> Play reel</button>
+        <button class="btn btn--glass" id="playReel" data-cursor="Soon" data-alt="Coming soon" aria-disabled="true" title="New showreel coming soon"><span class="btn__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span> Play reel</button>
       </div>
     </div>
   </div>
@@ -293,7 +293,7 @@
     <div class="testi__head">
       <div class="testi__lead"><p class="eyebrow">What our clients say</p><a class="testi__rating" href="https://www.google.com/maps/place/DRVN.social/@51.7598162,-3.199424,17z/data=!4m8!3m7!1s0x486e275ba716c76b:0x6db2ae42bd22b9da!8m2!3d51.7598162!4d-3.199424!9m1!1b1" target="_blank" rel="noopener" data-cursor="Google"><b>5.0</b><span class="tq__stars" aria-hidden="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span>on Google ↗</span></a></div>
       <div class="testi__ctrl">
-        <span class="testi__count"><b id="tqNow">01</b> / 03</span>
+        <span class="testi__count"><b id="tqNow">01</b> / 04</span>
         <button class="lw__arrow testi__arrow" id="tqPrev" aria-label="Previous testimonial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
         <button class="lw__arrow testi__arrow" id="tqNext" aria-label="Next testimonial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
@@ -326,8 +326,17 @@
           <span class="tq__g"><span class="tq__stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span class="tq__ver">Google review</span></span>
         </figcaption>
       </figure>
+      <figure class="tq" data-i="3" aria-hidden="true">
+        <blockquote class="tq__q"><span class="tq__w" style="--i:0">An</span> <span class="tq__w hl" style="--i:1">exceptional</span> <span class="tq__w hl" style="--i:2">team</span> <span class="tq__w" style="--i:3">who</span> <span class="tq__w" style="--i:4">know</span> <span class="tq__w" style="--i:5">exactly</span> <span class="tq__w" style="--i:6">what</span> <span class="tq__w" style="--i:7">they</span> <span class="tq__w" style="--i:8">are</span> <span class="tq__w" style="--i:9">doing.</span></blockquote>
+        <div class="tq__full"><p>An exceptional team who know exactly what they are doing. Highly recommend.</p></div>
+        <figcaption class="tq__by">
+          <span class="tq__av" aria-hidden="true">GL</span>
+          <span class="tq__who"><b>Guy Laffan</b><span>DRVN client</span></span>
+          <span class="tq__g"><span class="tq__stars" aria-label="5 out of 5 stars"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span class="tq__ver">Google review</span></span>
+        </figcaption>
+      </figure>
     </div>
-    <div class="testi__bars" id="tqBars"><button class="tq__bar" data-i="0" aria-label="Review 1"><i></i></button><button class="tq__bar" data-i="1" aria-label="Review 2"><i></i></button><button class="tq__bar" data-i="2" aria-label="Review 3"><i></i></button></div>
+    <div class="testi__bars" id="tqBars"><button class="tq__bar" data-i="0" aria-label="Review 1"><i></i></button><button class="tq__bar" data-i="1" aria-label="Review 2"><i></i></button><button class="tq__bar" data-i="2" aria-label="Review 3"><i></i></button><button class="tq__bar" data-i="3" aria-label="Review 4"><i></i></button></div>
   </div>
 </section>
 
@@ -438,6 +447,7 @@
 
 <!-- phones: the finale is replaced by the same CTA lock-up as the inner pages -->
 <section class="pfoot pfoot--home" id="contactMobile" aria-label="Start a project">
+  <div class="pfoot__glass" id="pfootGlassMobile" aria-hidden="true"></div>
     <div class="wrap pfoot__in">
     <h2 class="h-xl glow-title" aria-label="Let's make some noise."><span class="line"><span class="split">Let's make</span></span><span class="line"><span class="split">some noise.</span></span></h2>
     <div class="pfoot__foot"><p class="section-head__lede">We partner long-term with ambitious brands who want content that looks exceptional <em>and</em> genuinely performs. Get in touch and let's see what we can build together.</p>
@@ -459,18 +469,12 @@
 
 </main>
 
-<!-- reel modal -->
-<div class="modal" id="reelModal" aria-hidden="true">
-  <button class="modal__close" id="reelClose" aria-label="Close reel">✕</button>
-  <video id="reelVideo" controls playsinline preload="none" src="https://cdn.prod.website-files.com/69e329615752288e8bdb6465/69e329615752288e8bdb64cb_IMPO0001_OverarchingVideo_v002-transcode.mp4"></video>
-</div>
-
 <div class="consent" id="consent" role="region" aria-label="Cookie preferences" hidden>
   <p>We use a few cookies to see what's working. <a href="/privacy">Privacy</a></p>
   <button type="button" data-consent="no">Decline</button>
   <button type="button" data-consent="yes" class="is-yes">Accept</button>
 </div>
-<script src="assets/js/main.js?v=18"></script>
+<script src="assets/js/main.js?v=19"></script>
 <script src="assets/js/glass3d.js" defer></script>
 </body>
 </html>
