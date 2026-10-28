@@ -1,0 +1,89 @@
+/* DRVN Invaders (footer Easter egg). Loaded on every page; does nothing until the footer logo is clicked on a desktop. */
+.gi-logo{position:relative;display:block;width:78px;height:21.4px;color:#fff}   /* same box as the 78px SVG it replaces, so nothing shifts */
+.gi-logo span{color:#fff;font-size:0;white-space:nowrap}
+.finale__brand .gi-logo .footer__logo{display:none}
+.gi-logo .lt{position:absolute;top:0;height:21.4px;overflow:hidden}
+.gi-logo .lt__roll{display:block;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.gi-logo .lt__roll>span{display:block;height:21.4px}
+.gi-logo .lt svg{display:block;height:21.4px;overflow:visible}
+.gi-logo .lt .p{font-family:'Press Start 2P',monospace;font-size:14px;line-height:21.4px;text-align:center}
+.gi-logo:hover .lt__roll,.gi-logo.is-on .lt__roll{transform:translateY(-50%)}
+.gi-logo .lt:nth-child(2) .lt__roll{transition-delay:.07s}.gi-logo .lt:nth-child(3) .lt__roll{transition-delay:.14s}.gi-logo .lt:nth-child(4) .lt__roll{transition-delay:.21s}
+.gi-logo:hover{opacity:1!important;text-shadow:none!important}
+/* footer cells: page content and game content share the cell; game mode cross-fades */
+.finale__brand,.finale__links,.finale__bar .clock{position:relative}
+.gi-g{position:absolute;inset:0;display:flex;align-items:center;opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s;pointer-events:none}
+.gi-help{left:100px;gap:18px;font-family:'Press Start 2P',monospace;font-size:8px;line-height:1.8;color:rgba(255,255,255,.5);text-transform:uppercase;white-space:nowrap}
+.gi-help span{font-size:inherit;color:inherit}
+.gi-help b{color:#fff;font-weight:400}
+.gi-help .gi-snd{display:inline-block;width:7px;height:7px;margin-left:6px;background:#ffd23f;vertical-align:middle;box-shadow:0 0 6px rgba(255,210,63,.6)}
+.gi-help .gi-snd.is-off{background:rgba(255,255,255,.4);box-shadow:none}
+.gi-lives{justify-content:center;gap:10px}
+.gi-lives i.gem{display:block;width:34px!important;height:34px!important;transition:opacity .4s,filter .4s}
+.gi-lives i.is-lost{opacity:.18;filter:grayscale(1)}
+.gi-score{right:0;left:auto;flex-direction:column;align-items:flex-end;justify-content:center;text-align:right;font-family:'Press Start 2P',monospace;text-transform:uppercase;line-height:1}
+.gi-score .k{display:block;font-size:8px;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.08em}
+.gi-score .v{font-size:18px;letter-spacing:.06em;transition:color .2s}
+.gi-score.is-x2 .v{color:#ffd23f}
+.gi-score .hi{display:block;font-size:8px;color:rgba(255,255,255,.5);margin-top:6px}
+.gi-score .pt{position:absolute;right:0;bottom:-4px;height:3px;width:120px;background:rgba(255,255,255,.12);display:none}
+.gi-score .pt i{display:block;height:100%;background:#ffd23f;transform-origin:right;transform:scaleX(var(--p,1))}
+.gi-score.is-timed .pt{display:block}
+html.gi-on .finale__brand>span,html.gi-on .finale__links>div:not(.gi-g),html.gi-on .finale__bar .clock>span{opacity:0;transform:translateY(-8px);transition:opacity .35s,transform .35s;pointer-events:none}
+.finale__brand>span,.finale__links>div,.finale__bar .clock>span{transition:opacity .35s,transform .35s}
+html.gi-on .gi-g{opacity:1;transform:none;transition-delay:.45s;pointer-events:auto}
+/* the pinned footer */
+.gi-bar{position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:10002!important;transform:none!important;background:#0a0a0a!important;border-top:1px solid rgba(255,255,255,.14)!important;margin:0!important}
+html.gi-on{overflow:hidden}
+html.gi-on .nav,html.gi-on .cursor,html.gi-on #pageGlass,html.gi-on #finaleGlass,html.gi-on #pfootGlass,html.gi-on .finale__layer{opacity:0!important;transition:opacity .5s!important;pointer-events:none!important}
+/* the drop: individual translate/rotate so the site's own transforms are left alone */
+.gi-drop{transition:translate .8s cubic-bezier(.2,.8,.2,1) calc(var(--gd,0s) * .6 + .2s),rotate .8s cubic-bezier(.2,.8,.2,1) calc(var(--gd,0s) * .6 + .2s),opacity .35s linear calc(var(--gd,0s) * .6 + .2s)}
+html.gi-dropped .gi-drop{translate:0 125vh!important;rotate:var(--gr,4deg)!important;opacity:0!important;transition:translate .9s cubic-bezier(.55,0,.9,.4) var(--gd,0s),rotate .9s cubic-bezier(.55,0,.9,.4) var(--gd,0s),opacity .3s linear calc(var(--gd,0s) + .55s)!important}
+/* the game layer */
+.gi{position:fixed;left:0;right:0;top:0;bottom:86px;z-index:10001;visibility:hidden;pointer-events:none;background:#070707;opacity:0;transition:opacity .6s .5s,visibility 0s 1.2s;overflow:hidden;user-select:none;font-family:'Press Start 2P',monospace}
+.gi.is-on{visibility:visible;opacity:1;transition:opacity .6s .5s,visibility 0s}
+.gi::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;mix-blend-mode:overlay;opacity:.5;background:repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,transparent 1px 3px)}
+.gi.is-nd::before{opacity:.9}
+.gi::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.55))}
+.gi.is-hurt{animation:giHurt .35s steps(3)}
+@keyframes giHurt{50%{box-shadow:inset 0 0 0 6px #e0433a}}
+.gi-hud{position:absolute;z-index:5;font-size:10px;line-height:1.9;letter-spacing:.02em;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .4s}
+.gi.is-on .gi-hud{opacity:1;transition-delay:1s}
+.gi-hud--tl{left:var(--gutter,28px);top:26px}
+.gi-hud--tr{right:var(--gutter,28px);top:26px;text-align:right}
+.gi-hud .k{color:rgba(255,255,255,.5);font-size:8px}
+.gi-hud .big{font-size:14px}
+.gi-hud .big.is-low{color:#e0433a;animation:giBlink .6s steps(2) infinite}
+.gi-hud .big.is-empty{color:#e0433a}
+@keyframes giBlink{to{opacity:0}}
+.gi .blink{animation:giBlink 1s steps(2) infinite}
+.gi-msg{position:absolute;z-index:8;left:50%;top:42%;transform:translate(-50%,-50%);text-align:center;text-transform:uppercase;line-height:2.2;color:#fff}
+.gi-msg b{display:block;font-size:clamp(16px,2.6vw,28px);font-weight:400;margin-bottom:10px}
+.gi-msg span{display:block;font-size:9px;color:rgba(255,255,255,.5)}
+.gi-msg .y{color:#ffd23f}
+.gi .toast{position:absolute;z-index:8;left:50%;top:30%;transform:translateX(-50%);font-size:12px;color:#ffd23f;text-transform:uppercase;text-shadow:0 0 12px rgba(255,210,63,.6);animation:giToast 1.6s both;white-space:nowrap}
+@keyframes giToast{0%{opacity:0;transform:translate(-50%,10px)}15%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
+.gi .gem,.gi-lives .gem{display:block;width:100%;height:100%;background:var(--g) 0 0/2400% 100% no-repeat!important;animation:gemWobble 2.6s steps(23) infinite alternate;opacity:1!important;filter:drop-shadow(0 14px 22px rgba(0,0,0,.5))}
+.gi .foe{position:absolute;z-index:3;left:0;top:0;width:88px;height:88px;will-change:transform}
+.gi .foe--big{width:112px;height:112px}
+.gi .foe--sm{width:66px;height:66px}
+.gi .drop{position:absolute;z-index:3;left:0;top:0;will-change:transform;filter:drop-shadow(0 0 10px rgba(255,210,63,.35))}
+.gi canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+.gi .bolt{position:absolute;z-index:3;left:0;top:0;width:4px;height:16px;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.7);will-change:transform}
+.gi .beam{position:absolute;z-index:2;left:0;top:0;width:6px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff 30%);box-shadow:0 0 16px rgba(255,255,255,.6);opacity:.9;will-change:transform}
+.gi .beam--lens{width:14px;background:linear-gradient(180deg,rgba(169,213,255,0),#a9d5ff 25%);box-shadow:0 0 22px rgba(169,213,255,.7)}
+.gi .burst{position:absolute;z-index:4;left:0;top:0;animation:giBurst .32s steps(3) both}
+@keyframes giBurst{to{transform:scale(1.6);opacity:0}}
+.gi .pop{position:absolute;z-index:5;left:0;top:0;font-size:10px;color:#ffd23f;text-shadow:0 0 8px rgba(255,210,63,.6);animation:giPop .7s ease-out both;white-space:nowrap}
+@keyframes giPop{to{transform:translateY(-34px);opacity:0}}
+.gi .pop.pu{color:#a9d5ff}
+.gi-player{position:absolute;z-index:4;left:0;bottom:5px;will-change:transform}
+.gi-player>canvas,.gi-player>.shadow{transition:transform .55s cubic-bezier(.2,.9,.3,1.25),opacity .25s;transform:translateY(80px);opacity:0}
+.gi.is-on .gi-player>canvas,.gi.is-on .gi-player>.shadow{transform:none;opacity:1;transition-delay:1s}
+.gi-player .shadow{position:absolute;left:50%;bottom:-7px;width:80%;height:6px;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 50%,rgba(255,255,255,.2),transparent 70%)}
+.gi-player .cage{position:absolute;inset:-7px -7px -3px;border:3px solid #ffd23f;opacity:0;box-shadow:0 0 14px rgba(255,210,63,.5)}
+.gi-player.is-shield .cage{opacity:1;animation:giCage .9s steps(2) infinite alternate}
+@keyframes giCage{to{opacity:.55}}
+.gi-player.is-up{animation:giUp .6s steps(4)}
+@keyframes giUp{50%{filter:brightness(3)}}
+@media (prefers-reduced-motion:reduce){.gi .gem,.gi-lives .gem,.gi-logo .lt__roll,.gi-drop{animation:none;transition:none}}
