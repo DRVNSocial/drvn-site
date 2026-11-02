@@ -2,7 +2,7 @@
    The Sheet side is a small Google Apps Script web app (see DRVN_Enquiries_AppsScript.gs). Until its URL is set
    below, the form falls back to the old behaviour: a pre-filled email to hello@drvn.social. */
 (() => {
-  const ENDPOINT = '';   // Google Apps Script web-app URL, e.g. https://script.google.com/macros/s/XXXX/exec
+  const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzi_KRjV0JlIdyn-ZRDWlhXXZrSLH-GX1IRANON8fQAZK-tK-5B08Q2X80_gfIAq4_XTg/exec';   // Google Apps Script web app (DRVN Website Enquiries sheet)
   const f = document.getElementById('cform'); if (!f) return;
   const err = document.getElementById('cformErr'), btn = f.querySelector('[type=submit]');
   const thanks = document.getElementById('cthanks'), thanksName = document.getElementById('cthanksName');
