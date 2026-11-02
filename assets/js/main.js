@@ -1000,7 +1000,8 @@
     el.addEventListener('click', e => {
       const b = e.target.closest('[data-consent]'); if (!b) return;
       try { localStorage.setItem('drvn-consent', b.dataset.consent); } catch (er) {}
-      window.dispatchEvent(new CustomEvent('drvn:consent', { detail: b.dataset.consent }));   // hook analytics / pixel here later
+      window.dispatchEvent(new CustomEvent('drvn:consent', { detail: b.dataset.consent }));
+      if (window.fbq) fbq('consent', b.dataset.consent === 'yes' ? 'grant' : 'revoke');   // Meta Pixel only tracks once cookies are accepted
       el.classList.remove('is-on'); setTimeout(() => el.remove(), 600);
     });
   })();

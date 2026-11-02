@@ -13,6 +13,7 @@
     f.querySelectorAll('[required]').forEach(i => i.closest('.field, .cform__consent')?.classList.toggle('is-bad', i.type === 'checkbox' ? !i.checked : !i.value.trim()));
     if (miss.length) { err.textContent = 'Please add ' + miss.join(', ') + '.'; err.hidden = false; return; }
     err.hidden = true;
+    if (window.fbq) fbq('track', 'Lead');   // Meta Pixel: a valid enquiry counts as a lead (attributed back to the ad)
     const services = d.getAll('services');
     const lines = [
       `Name: ${d.get('name')}${d.get('role') ? ' (' + d.get('role') + ')' : ''}`,
