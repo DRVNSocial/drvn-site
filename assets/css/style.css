@@ -1996,3 +1996,9 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
 /* ---- showreel button: no reel yet, so hover/tap rolls the label to "Coming soon" ---- */
 .gbtn.is-alt .tab__roll span{transform:translateY(-100%)}
 .gbtn[aria-disabled="true"]{cursor:default}
+
+/* mobile menu: Safari clips the top-right of the italic N27 caps at the link's box (same issue as the headlines);
+   give the glyphs room on the right and above, and take the space back with margins so nothing moves */
+@media (max-width:900px){
+  .nav__sheet a{padding:calc(10px + .12em) .24em 10px;margin:-.12em -.24em 0;overflow:visible}
+}
