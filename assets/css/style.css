@@ -2008,6 +2008,7 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
 .cform.is-busy [type=submit]{opacity:.55;pointer-events:none}
 .cform__err a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 html.is-thanks{overflow:hidden}
+.cthanks[hidden]{display:none}
 .cthanks{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;padding:0 var(--gutter);background:#0a0a0a;text-align:center;
   opacity:0;transition:opacity .6s var(--ease)}
 .cthanks.is-on{opacity:1}
