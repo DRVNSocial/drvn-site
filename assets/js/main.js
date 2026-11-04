@@ -1002,6 +1002,7 @@
       try { localStorage.setItem('drvn-consent', b.dataset.consent); } catch (er) {}
       window.dispatchEvent(new CustomEvent('drvn:consent', { detail: b.dataset.consent }));
       if (window.fbq) fbq('consent', b.dataset.consent === 'yes' ? 'grant' : 'revoke');   // Meta Pixel only tracks once cookies are accepted
+      if (typeof gtag === 'function') { const v = b.dataset.consent === 'yes' ? 'granted' : 'denied'; gtag('consent', 'update', { ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v }); }   // Google tag too
       el.classList.remove('is-on'); setTimeout(() => el.remove(), 600);
     });
   })();

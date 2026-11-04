@@ -37,6 +37,7 @@
 
     if (!ENDPOINT) {   // not connected to the Sheet yet: hand over to the visitor's email app, as before
       if (window.fbq) fbq('track', 'Lead');
+      if (typeof gtag === 'function') gtag('event', 'conversion', {send_to: 'AW-11467728870/sj3gCMiN8bEdEObPntwq'});
       const lines = [
         `Name: ${d.get('name')}${d.get('role') ? ' (' + d.get('role') + ')' : ''}`,
         `Business: ${d.get('business')}`, d.get('website') && `Website/social: ${d.get('website')}`,
@@ -61,7 +62,8 @@
       const r = await fetch(ENDPOINT, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
       const j = await r.json();
       if (!j.ok) throw new Error(j.error || 'not saved');
-      if (window.fbq) fbq('track', 'Lead');   // only once the enquiry is definitely saved
+      if (window.fbq) fbq('track', 'Lead');
+      if (typeof gtag === 'function') gtag('event', 'conversion', {send_to: 'AW-11467728870/sj3gCMiN8bEdEObPntwq'});   // only once the enquiry is definitely saved
       showThanks(first);
     } catch (x) {
       err.innerHTML = 'Sorry, that didn’t send. Please try again, or email us at <a href="mailto:hello@drvn.social">hello@drvn.social</a>.';
