@@ -651,6 +651,8 @@
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (!e.isIntersecting) return;
     e.target.classList.add('is-in');
+    const head = e.target.closest('.section-head');   // a section heading, its intro copy and button arrive as one piece
+    if (head) $$('[data-reveal]', head).forEach(el => { if (el !== e.target) { el.classList.add('is-in'); io.unobserve(el); } });
     const n = e.target.querySelector('[data-count]');
     if (n) countUp(n);
     io.unobserve(e.target);
@@ -826,7 +828,27 @@
     const smooth = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); };
     const RUN = .66;                                              // phones + stats take the first 66% of the scroll
     let mx = 0, smx = 0, on = false, tH = 0, fH = 0, bH = 0;
-    const measure = () => { tH = title.offsetHeight; fH = foot.offsetHeight; bH = bar ? bar.offsetHeight : 0; };
+    const PHONE_UI = innerWidth < 900;                           // phones: no live video, no blur filters (smooth scrolling first)
+    const gems = $$('.ff-gem', sec);
+    // devices live in two side columns that never cross the numbers (a safe zone the width of the widest figure),
+    // alternate left / right, and set off at even intervals so there are devices on screen right through to the last figure
+    const layout = () => {
+      let bw = 0;
+      stats.forEach(s => { const old = s.n.textContent; s.n.textContent = s.pre + fmtN(s.end, s.dec) + s.suf; bw = Math.max(bw, s.n.getBoundingClientRect().width); s.n.textContent = old; });
+      const W = innerWidth, gap = PHONE_UI ? 6 : 26, colL = (W - bw) / 2 - gap, colR = (W + bw) / 2 + gap;
+      const vis = ph.filter(o => getComputedStyle(o.el).display !== 'none');
+      const JIT = [.2, .65, .4, .9, .55, .1, .75, .3, .85];
+      vis.forEach((o, i) => {
+        const w = o.el.offsetWidth, left = i % 2 === 0, j = JIT[i % JIT.length];
+        const x = left ? Math.max(-w * .5, (colL - w) - Math.max(0, colL - w) * j)
+                       : Math.min(W - w * .5, colR + Math.max(0, W - colR - w) * j);
+        o.el.style.left = x.toFixed(1) + 'px';
+      });
+      const r = sec.getBoundingClientRect(), vh = innerHeight, S0 = -(vh * (innerWidth < 900 ? .7 : .5)) / Math.max(1, r.height - vh);
+      const LEN = PHONE_UI ? .5 : .38, a0 = S0 - .14, aN = .95 - LEN, step = (aN - a0) / Math.max(1, vis.length - 1);
+      vis.forEach((o, i) => { o.w = [a0 + i * step, a0 + i * step + LEN]; });
+    };
+    const measure = () => { tH = title.offsetHeight; fH = foot.offsetHeight; bH = bar ? bar.offsetHeight : 0; layout(); };
     measure(); addEventListener('resize', measure); document.fonts?.ready.then(measure);
     if (finePointer) sec.addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; }, { passive: true });
     const tick = () => {
@@ -847,13 +869,13 @@
         const fin = smooth(t / .22), fout = i === stats.length - 1 ? smooth((t - .78) / .22) : smooth((t - .8) / .2);
         const vis = Math.min(fin, 1 - fout), fo = 1 - vis;
         s.el.style.opacity = vis.toFixed(3);
-        s.el.style.filter = fo > .01 ? `blur(${(fo * 16).toFixed(1)}px)` : 'none';
+        s.el.style.filter = !PHONE_UI && fo > .01 ? `blur(${(fo * 16).toFixed(1)}px)` : 'none';
         s.el.style.transform = `translate(-50%,-50%) translate3d(0,${((t < .5 ? 1 : -1) * fo * 24).toFixed(1)}px,0)`;
         if (!isNaN(s.end)) { const c = smooth((t - .12) / .5); s.n.textContent = s.pre + fmtN(s.end * c, s.dec) + s.suf; }
       });
       // title arrives line by line, then the lock-up
       lines.forEach((l, i) => { const k = smooth((p - (RUN - .02) - i * .03) / .07); l.style.setProperty('--fo', (1 - k).toFixed(3)); });
-      sec.style.setProperty('--grise', ((1 - smooth((p - .64) / .22)) * 1.15).toFixed(4));   // phones: the baked glass emojis rise past and settle around the title, like the desktop WebGL ones
+      if (gems.length && PHONE_UI) { const gy = ((1 - smooth((p - .64) / .22)) * 1.15 * vh).toFixed(1); gems.forEach(g => { g.style.transform = `translate3d(0,${gy}px,0)`; }); }   // phones: baked glass emojis rise past and settle round the title
       // lock-up: title + CTA settle as one group in the centre of the frame; the thin footer bar slides up to the bottom edge
       const q = smooth((p - .76) / .14), gap = Math.max(20, vh * .04);
       const G = tH + gap + fH, gTop = (vh - G) / 2;
@@ -866,7 +888,7 @@
     };
     new IntersectionObserver(([e]) => {
       on = e.isIntersecting;
-      ph.forEach(o => { if (!o.v) return; if (on && !reduce) { if (o.v.preload === 'none') o.v.preload = 'auto'; o.v.play().catch(() => {}); } else o.v.pause(); });
+      ph.forEach(o => { if (!o.v) return; if (on && !reduce && !PHONE_UI) { if (o.v.preload === 'none') o.v.preload = 'auto'; o.v.play().catch(() => {}); } else o.v.pause(); });   // phones show the posters: nine videos at once is what made it lag
       if (on) { measure(); title.classList.add('is-in'); requestAnimationFrame(tick); }
     }, { rootMargin: '200px 0px' }).observe(sec);
     // "Start project" links land on the finished lock-up

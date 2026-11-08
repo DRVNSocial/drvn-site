@@ -2034,7 +2034,7 @@ html.is-thanks{overflow:hidden}
 /* homepage finale on phones: baked glass emojis rise with the scroll and settle around the title (desktop uses the live WebGL ones) */
 .ff-gem{display:none}
 @media (max-width:900px){
-  .ff-gem{display:block;position:absolute;width:112px;height:112px;transform:translate3d(0,calc(var(--grise,1.15) * 100svh),0);will-change:transform}
+  .ff-gem{display:block;position:absolute;width:112px;height:112px;transform:translate3d(0,115svh,0);will-change:transform}
   .ff-gem>span{display:block;width:100%;height:100%;animation:gemFloat 6s ease-in-out infinite alternate}
   .ff-gem--1{right:6%;top:15%}
   .ff-gem--2{left:5%;top:23%;width:96px;height:96px}
@@ -2055,6 +2055,17 @@ html.is-thanks{overflow:hidden}
   .cform legend{padding-top:37px}
   .cform fieldset:first-of-type legend{padding-top:0}
   .cform fieldset:last-of-type legend{padding-top:0}
-  .cform fieldset:last-of-type{margin-top:-13px}
+  .cform fieldset:last-of-type{margin-top:4px}
   .cform .svcs,.cform .field--full{margin-top:24px}
 }
+
+/* homepage finale on phones: smaller devices that stay in the side columns (clear of the numbers), cheaper effects so the scroll stays smooth */
+@media (max-width:900px){
+  .finale .fstat__n{font-size:min(17vw,15vh)}
+  .finale .fp1{--w:96px}.finale .fp2{--w:86px}.finale .fp3{--w:104px}.finale .fp4{--w:88px}.finale .fp5{--w:118px}.finale .fp6{--w:124px}.finale .fp7{--w:108px}.finale .fp8{--w:92px}.finale .fp9{--w:110px}
+  .finale__layer--back .fphone{filter:none}
+  .finale__layer--back .fphone .fphone__in::after{content:"";position:absolute;inset:0;border-radius:inherit;background:rgba(0,0,0,.4);pointer-events:none}
+  .finale .fstat{will-change:opacity,transform}
+}
+/* section headings: heading, intro and button rise together, on one layer, same timing */
+.section-head [data-reveal]{transition:opacity .9s var(--ease-out),transform 1s var(--ease-out);transition-delay:0s}
