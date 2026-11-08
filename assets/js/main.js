@@ -828,25 +828,30 @@
     const smooth = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); };
     const RUN = .66;                                              // phones + stats take the first 66% of the scroll
     let mx = 0, smx = 0, on = false, tH = 0, fH = 0, bH = 0;
-    const PHONE_UI = innerWidth < 900;                           // phones: no live video, no blur filters (smooth scrolling first)
-    const gems = $$('.ff-gem', sec);
-    // devices live in two side columns that never cross the numbers (a safe zone the width of the widest figure),
-    // alternate left / right, and set off at even intervals so there are devices on screen right through to the last figure
+    const PHONE_UI = innerWidth < 900;                           // phones: no blur filters (smooth scrolling first)
+    // devices live in two side columns that never cross the numbers (a safe zone the width of the widest figure).
+    // Two depths: big bright ones in front that move quicker, small dim ones behind that drift slower. They set off
+    // at uneven intervals right through to the last figure, so the field never looks gridded or runs dry.
+    const ORDER = ['fp5', 'fp1', 'fp3', 'fp6', 'fp2', 'fp7', 'fp4', 'fp9', 'fp8'];
+    const SIDE = { fp5: 0, fp1: 1, fp3: 1, fp6: 0, fp2: 0, fp7: 1, fp4: 0, fp9: 1, fp8: 1 };          // 0 left, 1 right
+    const DX = { fp5: .15, fp1: .55, fp3: .1, fp6: .35, fp2: .8, fp7: .6, fp4: .3, fp9: .2, fp8: .9 };   // how far into its column
+    const DT = { fp5: 0, fp1: .35, fp3: -.2, fp6: .25, fp2: -.3, fp7: .1, fp4: .4, fp9: -.15, fp8: .2 }; // nudges off the even beat
     const layout = () => {
       let bw = 0;
       stats.forEach(s => { const old = s.n.textContent; s.n.textContent = s.pre + fmtN(s.end, s.dec) + s.suf; bw = Math.max(bw, s.n.getBoundingClientRect().width); s.n.textContent = old; });
       const W = innerWidth, gap = PHONE_UI ? 6 : 26, colL = (W - bw) / 2 - gap, colR = (W + bw) / 2 + gap;
-      const vis = ph.filter(o => getComputedStyle(o.el).display !== 'none');
-      const JIT = [.2, .65, .4, .9, .55, .1, .75, .3, .85];
-      vis.forEach((o, i) => {
-        const w = o.el.offsetWidth, left = i % 2 === 0, j = JIT[i % JIT.length];
-        const x = left ? Math.max(-w * .5, (colL - w) - Math.max(0, colL - w) * j)
-                       : Math.min(W - w * .5, colR + Math.max(0, W - colR - w) * j);
-        o.el.style.left = x.toFixed(1) + 'px';
-      });
+      const vis = ORDER.map(k => ph.find(o => o.el.classList.contains(k))).filter(o => o && getComputedStyle(o.el).display !== 'none');
       const r = sec.getBoundingClientRect(), vh = innerHeight, S0 = -(vh * (innerWidth < 900 ? .7 : .5)) / Math.max(1, r.height - vh);
-      const LEN = PHONE_UI ? .5 : .38, a0 = S0 - .14, aN = .95 - LEN, step = (aN - a0) / Math.max(1, vis.length - 1);
-      vis.forEach((o, i) => { o.w = [a0 + i * step, a0 + i * step + LEN]; });
+      const a0 = S0 - .16, aN = .93, step = (aN - a0 - .45) / Math.max(1, vis.length - 1);
+      vis.forEach((o, i) => {
+        const k = ORDER.find(c => o.el.classList.contains(c)), w = o.el.offsetWidth, left = SIDE[k] === 0, j = DX[k];
+        o.h = o.el.offsetHeight;                                   // cached: reading it every frame forced a re-layout per phone
+        const x = left ? Math.max(-w * .55, (colL - w) - Math.max(0, colL - w) * j)
+                       : Math.min(W - w * .45, colR + Math.max(0, W - colR - w) * j);
+        o.el.style.left = x.toFixed(1) + 'px';
+        const len = o.front ? .36 : .58, s = a0 + (i + DT[k]) * step;   // front: quicker, behind: slower (parallax)
+        o.w = [s, s + len];
+      });
     };
     const measure = () => { tH = title.offsetHeight; fH = foot.offsetHeight; bH = bar ? bar.offsetHeight : 0; layout(); };
     measure(); addEventListener('resize', measure); document.fonts?.ready.then(measure);
@@ -857,7 +862,9 @@
       const p = -r.top / Math.max(1, r.height - vh);
       smx += (mx - smx) * .08;
       ph.forEach(o => {
-        const t = (p - o.w[0]) / (o.w[1] - o.w[0]), hgt = o.el.offsetHeight;
+        const t = (p - o.w[0]) / (o.w[1] - o.w[0]), hgt = o.h || o.el.offsetHeight;
+        const vis = t > -.08 && t < 1.08;                         // only the devices on screen play their video
+        if (o.v && vis !== o.playing && !reduce) { o.playing = vis; if (vis) { if (o.v.preload === 'none') o.v.preload = 'auto'; o.v.play().catch(() => {}); } else o.v.pause(); }
         const y = vh * 1.04 + (-hgt - vh * .04 - vh * 1.04) * Math.min(1.2, Math.max(-.1, t)), x = smx * (o.front ? -40 : 18);
         o.el.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0)`;
       });
@@ -875,7 +882,6 @@
       });
       // title arrives line by line, then the lock-up
       lines.forEach((l, i) => { const k = smooth((p - (RUN - .02) - i * .03) / .07); l.style.setProperty('--fo', (1 - k).toFixed(3)); });
-      if (gems.length && PHONE_UI) { const gy = ((1 - smooth((p - .64) / .22)) * 1.15 * vh).toFixed(1); gems.forEach(g => { g.style.transform = `translate3d(0,${gy}px,0)`; }); }   // phones: baked glass emojis rise past and settle round the title
       // lock-up: title + CTA settle as one group in the centre of the frame; the thin footer bar slides up to the bottom edge
       const q = smooth((p - .76) / .14), gap = Math.max(20, vh * .04);
       const G = tH + gap + fH, gTop = (vh - G) / 2;
@@ -888,7 +894,7 @@
     };
     new IntersectionObserver(([e]) => {
       on = e.isIntersecting;
-      ph.forEach(o => { if (!o.v) return; if (on && !reduce && !PHONE_UI) { if (o.v.preload === 'none') o.v.preload = 'auto'; o.v.play().catch(() => {}); } else o.v.pause(); });   // phones show the posters: nine videos at once is what made it lag
+      if (!on) ph.forEach(o => { if (o.v) { o.v.pause(); o.playing = false; } });   // videos play one by one as their device comes on screen (see tick)
       if (on) { measure(); title.classList.add('is-in'); requestAnimationFrame(tick); }
     }, { rootMargin: '200px 0px' }).observe(sec);
     // "Start project" links land on the finished lock-up

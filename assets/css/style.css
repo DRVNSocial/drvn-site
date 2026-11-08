@@ -2031,16 +2031,6 @@ html.is-thanks{overflow:hidden}
 .h-xl[data-reveal]{padding:.1em .18em .1em .04em;margin:-.1em -.18em -.1em -.04em}
 @media (prefers-reduced-motion:reduce){[data-reveal],.mstat[data-reveal]{opacity:1;transform:none;filter:none}}
 
-/* homepage finale on phones: baked glass emojis rise with the scroll and settle around the title (desktop uses the live WebGL ones) */
-.ff-gem{display:none}
-@media (max-width:900px){
-  .ff-gem{display:block;position:absolute;width:112px;height:112px;transform:translate3d(0,115svh,0);will-change:transform}
-  .ff-gem>span{display:block;width:100%;height:100%;animation:gemFloat 6s ease-in-out infinite alternate}
-  .ff-gem--1{right:6%;top:15%}
-  .ff-gem--2{left:5%;top:23%;width:96px;height:96px}
-  .ff-gem--3{right:9%;top:66%;width:92px;height:92px}
-  .ff-gem--2>span{animation-delay:-2s}.ff-gem--3>span{animation-delay:-4s}
-}
 /* testimonials: holding a review pauses it; stop iOS turning the hold into a text selection or callout */
 @media (pointer:coarse){.testi__stage{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
 /* mobile menu: always the dark sheet look, even when it's opened over a white section (logo, X and Start Project stay white) */
@@ -2062,7 +2052,11 @@ html.is-thanks{overflow:hidden}
 /* homepage finale on phones: smaller devices that stay in the side columns (clear of the numbers), cheaper effects so the scroll stays smooth */
 @media (max-width:900px){
   .finale .fstat__n{font-size:min(17vw,15vh)}
-  .finale .fp1{--w:96px}.finale .fp2{--w:86px}.finale .fp3{--w:104px}.finale .fp4{--w:88px}.finale .fp5{--w:118px}.finale .fp6{--w:124px}.finale .fp7{--w:108px}.finale .fp8{--w:92px}.finale .fp9{--w:110px}
+  .finale .fp1,.finale .fp2,.finale .fp7,.finale .fp8,.finale .fp9{display:block}
+  /* two depths: small + dim behind, big + bright in front */
+  .finale .fp1{--w:84px}.finale .fp2{--w:96px}.finale .fp3{--w:76px}.finale .fp4{--w:90px}.finale .fp8{--w:70px}
+  .finale .fp5{--w:150px}.finale .fp6{--w:170px}.finale .fp7{--w:128px}.finale .fp9{--w:142px}
+  .finale__layer--front .fphone__in{box-shadow:0 30px 60px rgba(0,0,0,.6)}
   .finale__layer--back .fphone{filter:none}
   .finale__layer--back .fphone .fphone__in::after{content:"";position:absolute;inset:0;border-radius:inherit;background:rgba(0,0,0,.4);pointer-events:none}
   .finale .fstat{will-change:opacity,transform}
