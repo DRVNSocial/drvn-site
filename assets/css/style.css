@@ -1924,7 +1924,7 @@ html.intro .hero__title:not(.is-in){visibility:hidden}
 .ins__card.is-in{opacity:1;transform:none}
 /* homepage: phones get the inner-page CTA instead of the scroll-driven finale */
 .pfoot--home{display:none}
-@media (max-width:900px){.finale{display:none}.pfoot--home{display:flex}}
+/* (phones now get the same scroll-driven finale as desktop: stats centred, counting up, phones and emojis drifting past) */
 
 /* phones: glass icons are baked filmstrips (no live WebGL), so scrolling stays smooth */
 .hero__gems{display:none}
@@ -2024,22 +2024,37 @@ html.is-thanks{overflow:hidden}
 .cthanks.is-on .cthanks__t .line{opacity:1;filter:blur(0);transform:none}
 @media (prefers-reduced-motion:reduce){.cthanks,.cthanks *{transition:none!important}}
 
-/* =========================================================
-   PHONES: the homepage stats (the desktop finale is swapped for the contact block on phones)
-   ========================================================= */
-.mstats{display:none}
-@media (max-width:900px){
-  .mstats{display:block;background:var(--ink);padding:12svh var(--gutter) 2svh}
-  .mstats__eb{display:flex;justify-content:center;text-align:center;margin:0 0 2svh}
-  .mstat{min-height:44svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
-  .mstat .fstat__n{font-size:min(24vw,20vh)}
-  .mstat .fstat__k{font-size:12px}
-  .mstat[data-reveal]{filter:blur(10px);transition:opacity 1s var(--ease-out),transform 1.1s var(--ease-out),filter 1s var(--ease-out)}
-  .mstat[data-reveal].is-in{filter:blur(0)}
-}
 /* reveals: keep the text on its own layer from start to finish, so iOS Safari doesn't re-draw it (and nudge it)
    the moment the rise ends, and give big italic headings room so their overhang isn't clipped mid-animation */
 [data-reveal]{transform:translate3d(0,40px,0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
 [data-reveal].is-in{transform:translate3d(0,0,0)}
 .h-xl[data-reveal]{padding:.1em .18em .1em .04em;margin:-.1em -.18em -.1em -.04em}
 @media (prefers-reduced-motion:reduce){[data-reveal],.mstat[data-reveal]{opacity:1;transform:none;filter:none}}
+
+/* homepage finale on phones: baked glass emojis rise with the scroll and settle around the title (desktop uses the live WebGL ones) */
+.ff-gem{display:none}
+@media (max-width:900px){
+  .ff-gem{display:block;position:absolute;width:112px;height:112px;transform:translate3d(0,calc(var(--grise,1.15) * 100svh),0);will-change:transform}
+  .ff-gem>span{display:block;width:100%;height:100%;animation:gemFloat 6s ease-in-out infinite alternate}
+  .ff-gem--1{right:6%;top:15%}
+  .ff-gem--2{left:5%;top:23%;width:96px;height:96px}
+  .ff-gem--3{right:9%;top:66%;width:92px;height:92px}
+  .ff-gem--2>span{animation-delay:-2s}.ff-gem--3>span{animation-delay:-4s}
+}
+/* testimonials: holding a review pauses it; stop iOS turning the hold into a text selection or callout */
+@media (pointer:coarse){.testi__stage{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
+/* mobile menu: always the dark sheet look, even when it's opened over a white section (logo, X and Start Project stay white) */
+.nav.is-open.is-light .nav__logo{color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+.nav.is-open.is-light .nav__burger span{background:#fff}
+.nav.is-open.is-light .nav__cta{color:#000}
+.nav.is-open.is-light .cta__bg{background:#fff}
+.nav.is-open.is-light .nav__glass{--nav-tint:rgba(12,12,12,.06);--nav-drop:0 14px 34px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.16)}
+.nav.is-open.is-light .nav__frost{background:transparent}
+/* contact form on phones: section titles sit the same distance from the fields above and below */
+@media (max-width:900px){
+  .cform legend{padding-top:37px}
+  .cform fieldset:first-of-type legend{padding-top:0}
+  .cform fieldset:last-of-type legend{padding-top:0}
+  .cform fieldset:last-of-type{margin-top:-13px}
+  .cform .svcs,.cform .field--full{margin-top:24px}
+}

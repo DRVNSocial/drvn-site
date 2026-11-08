@@ -853,6 +853,7 @@
       });
       // title arrives line by line, then the lock-up
       lines.forEach((l, i) => { const k = smooth((p - (RUN - .02) - i * .03) / .07); l.style.setProperty('--fo', (1 - k).toFixed(3)); });
+      sec.style.setProperty('--grise', ((1 - smooth((p - .64) / .22)) * 1.15).toFixed(4));   // phones: the baked glass emojis rise past and settle around the title, like the desktop WebGL ones
       // lock-up: title + CTA settle as one group in the centre of the frame; the thin footer bar slides up to the bottom edge
       const q = smooth((p - .76) / .14), gap = Math.max(20, vh * .04);
       const G = tH + gap + fH, gTop = (vh - G) / 2;
@@ -956,7 +957,7 @@
     };
     const tick = n => {
       if (visible && !paused && !reduce) {
-        const p = Math.min(1, (n - t0) / (qs[cur]._dur || (qs[cur]._dur = Math.min(13000, Math.max(DUR, 3500 + qs[cur].textContent.trim().split(/\s+/).length * 70)))));
+        const p = Math.min(1, (n - t0) / DUR);   // every review gets the same 5 seconds
         bars[cur]?.querySelector('i').style.setProperty('--p', p.toFixed(4));
         if (p >= 1) show(cur + 1);
       }
@@ -968,8 +969,13 @@
     bars.forEach((b, k) => b.addEventListener('click', () => show(k)));
     const sec = $('#testimonials');
     let sx = null;
-    stage.addEventListener('pointerdown', e => { sx = e.clientX; });
-    addEventListener('pointerup', e => { if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); });
+    // hold a finger (or the mouse) on a review to pause its timer, like an Instagram story; let go and it carries on
+    const hold = () => { if (paused) return; paused = true; pausedAt = performance.now(); stage.classList.add('is-held'); };
+    const release = () => { if (!paused) return; paused = false; t0 += performance.now() - pausedAt; stage.classList.remove('is-held'); };
+    stage.addEventListener('pointerdown', e => { sx = e.clientX; hold(); });
+    stage.addEventListener('contextmenu', e => { if (e.pointerType !== 'mouse') e.preventDefault(); });
+    addEventListener('pointercancel', () => { sx = null; release(); });
+    addEventListener('pointerup', e => { release(); if (sx === null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); });
     new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was) { t0 = performance.now(); show(cur); } }, { threshold: .35 }).observe(sec);
   })();
 
