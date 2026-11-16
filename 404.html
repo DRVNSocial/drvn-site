@@ -2,6 +2,8 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
+<script>/* /contact/ -> /contact (GitHub Pages only serves the no-slash form). Keeps ?utm_ tags and #hash. */
+(function(){var p=location.pathname;if(p.length>1&&/\/$/.test(p)){location.replace(p.replace(/\/+$/,'')+location.search+location.hash);}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page not found | DRVN Social</title>
 <meta name="description" content="That page has moved or never existed.">
@@ -93,7 +95,7 @@ fbq('track', 'PageView');
 <script>
 /* old-site paths → new pages (GitHub Pages has no server-side redirects) */
 (function(){var p=location.pathname.replace(/\/+$/,'').toLowerCase();var map=[[/^\/work\/.+/,'/work'],[/^\/(blog|insight|insights)\/.+/,'/insights'],[/^\/(contact-us|get-in-touch)$/,'/contact'],[/^\/(about-us|team)$/,'/about'],[/^\/(privacy-policy)$/,'/privacy']];
-for(var i=0;i<map.length;i++){if(map[i][0].test(p)){location.replace(map[i][1]);return;}}})();
+for(var i=0;i<map.length;i++){if(map[i][0].test(p)){location.replace(map[i][1]+location.search+location.hash);return;}}})();
 </script>
 
 <section class="pfoot pfoot--bar">
@@ -119,7 +121,7 @@ for(var i=0;i<map.length;i++){if(map[i][0].test(p)){location.replace(map[i][1]);
   <button type="button" data-consent="no">Decline</button>
   <button type="button" data-consent="yes" class="is-yes">Accept</button>
 </div>
-<script src="assets/js/main.js?v=24"></script>
+<script src="assets/js/main.js?v=25"></script>
 <script src="assets/js/glass3d.js?v=12" defer></script>
 <script src="assets/js/game.js?v=1" defer></script>
 </body>
