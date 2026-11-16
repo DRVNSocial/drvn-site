@@ -1077,3 +1077,21 @@
     el.appendChild(f); el.querySelector('.post__play')?.remove();
   }, { once: true }));
 })();
+
+/* Track phone + email clicks as enquiries (GA4 + Google Ads + Meta). Consent mode still applies. */
+(() => {
+  const GA = 'G-N9BXJ3H8LM';
+  let gaReady = false;
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a[href^="tel:"], a[href^="mailto:"]');
+    if (!a) return;
+    const isTel = a.getAttribute('href').startsWith('tel:');
+    const name = isTel ? 'click_phone' : 'click_email';
+    if (typeof gtag === 'function') {
+      if (!gaReady) { gtag('config', GA, { send_page_view: false }); gaReady = true; }
+      gtag('event', name, { send_to: GA, link_url: a.href, link_text: (a.textContent || '').trim().slice(0, 60), page_path: location.pathname });
+      gtag('event', name, { send_to: 'AW-11467728870' });
+    }
+    if (window.fbq) fbq('track', 'Contact', { method: isTel ? 'phone' : 'email' });
+  }, true);
+})();
