@@ -753,9 +753,22 @@
   /* ---------------------------------------------------------
      REEL MODAL
      --------------------------------------------------------- */
-  // showreel: the new reel is in the edit, so the button stays but rolls to "Coming soon" (hover on desktop, tap on touch)
-  const reelBtn = $('#playReel');
-  if (reelBtn) { let t; reelBtn.addEventListener('click', e => { e.preventDefault(); reelBtn.classList.add('is-alt'); clearTimeout(t); t = setTimeout(() => reelBtn.classList.remove('is-alt'), 1600); }); }
+  // showreel: opens the YouTube film in the lightbox player (nothing loads from YouTube until it's clicked)
+  const reelBtn = $('#playReel'), reelLb = $('#pjLb');
+  if (reelBtn && reelLb && reelBtn.dataset.yt) {
+    const stage = $('.pj-lb__stage', reelLb), x = $('.pj-lb__x', reelLb);
+    const close = () => { reelLb.classList.remove('is-open'); root.classList.remove('is-lb-open'); root.style.overflow = ''; setTimeout(() => { reelLb.hidden = true; stage.innerHTML = ''; }, 300); reelBtn.focus(); };
+    const open = e => {
+      e.preventDefault();
+      stage.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${reelBtn.dataset.yt}?autoplay=1&rel=0&playsinline=1" title="DRVN Social showreel" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      reelLb.hidden = false; root.classList.add('is-lb-open'); root.style.overflow = 'hidden';
+      requestAnimationFrame(() => reelLb.classList.add('is-open')); x.focus();
+    };
+    reelBtn.addEventListener('click', open);
+    x.addEventListener('click', close);
+    reelLb.addEventListener('click', e => { if (e.target === reelLb || e.target === stage) close(); });
+    addEventListener('keydown', e => { if (!reelLb.hidden && e.key === 'Escape') close(); });
+  }
   addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
   /* =========================================================
