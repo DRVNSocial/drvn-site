@@ -19,6 +19,13 @@
     thanks.tabIndex = -1; thanks.focus({ preventScroll: true });   // screen readers land on the message; no focus ring on a button
     f.reset();
   };
+  // someone has started filling in the form: lets Meta retarget people who began an enquiry but never sent it
+  let started = false;
+  f.addEventListener('focusin', () => {
+    if (started) return; started = true;
+    if (window.fbq) fbq('trackCustom', 'StartEnquiry');
+    if (typeof gtag === 'function') { gtag('config', 'G-N9BXJ3H8LM', { send_page_view: false }); gtag('event', 'form_start', { send_to: 'G-N9BXJ3H8LM', form_id: 'cform' }); }
+  });
   const setBusy = on => { f.classList.toggle('is-busy', on); btn.disabled = on; btn.setAttribute('aria-busy', String(on)); };
 
   f.addEventListener('submit', async e => {
