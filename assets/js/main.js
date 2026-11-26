@@ -1043,7 +1043,7 @@
     let saved = null; try { saved = localStorage.getItem('drvn-consent'); } catch (e) {}
     if (saved) return;
     el.hidden = false;
-    setTimeout(() => el.classList.add('is-on'), root.classList.contains('intro') ? 6000 : 1500);
+    setTimeout(() => el.classList.add('is-on'), root.classList.contains('intro') ? 3800 : 800);
     el.addEventListener('click', e => {
       const b = e.target.closest('[data-consent]'); if (!b) return;
       try { localStorage.setItem('drvn-consent', b.dataset.consent); } catch (er) {}
