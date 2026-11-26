@@ -148,33 +148,33 @@
     caret.classList.add('is-typing');
     const typeNext = i => {
       if (done) return;
-      if (i >= paths.length) { caret.classList.remove('is-typing'); return at(900, rest); }   // caret blinks: "enter"
+      if (i >= paths.length) { caret.classList.remove('is-typing'); return at(300, rest); }   // caret blinks: "enter"
       paths[i].p.style.opacity = 1; caretTo(i);
       // human rhythm: uneven keystrokes, the odd hesitation, a proper pause at the "space" before SOCIAL
-      let gap = 55 + Math.random() * 150;
-      if (Math.random() < 0.22) gap += 90 + Math.random() * 160;
-      if (i === 3) gap = 320 + Math.random() * 200;
+      let gap = 30 + Math.random() * 55;
+      if (Math.random() < 0.15) gap += 40 + Math.random() * 60;
+      if (i === 3) gap = 150 + Math.random() * 80;
       at(gap, () => typeNext(i + 1));
     };
-    at(350, () => typeNext(0));
+    at(120, () => typeNext(0));
     const rest = () => {
       // 2a — the compact bar rises to the top, and the header video starts fading in with it
       root.classList.remove('intro-center'); dispatchEvent(new Event('drvn:lift'));
       // 2b — once it lands, it opens into the full nav and Start Project grows out of its circle, together
-      at(1150, () => { root.classList.remove('intro-1'); root.classList.add('intro-2'); });
+      at(650, () => { root.classList.remove('intro-1'); root.classList.add('intro-2'); });
       // 3 — headline animates in as the nav opens
-      at(1450, titleIn);
+      at(800, titleIn);
       // 4 — everything else fades up
-      at(2250, () => { root.classList.add('intro-4'); dispatchEvent(new Event('drvn:intro')); });
-      at(3650, () => { done = true; paths.forEach(o => o.p.style.opacity = ''); root.classList.remove('intro', 'intro-2', 'intro-4', 'intro-go'); caret.remove(); dispatchEvent(new Event('resize')); });
+      at(1150, () => { root.classList.add('intro-4'); dispatchEvent(new Event('drvn:intro')); });
+      at(2000, () => { done = true; paths.forEach(o => o.p.style.opacity = ''); root.classList.remove('intro', 'intro-2', 'intro-4', 'intro-go'); caret.remove(); dispatchEvent(new Event('resize')); });
     };
     // skip on any intent to interact
     };
     let started = false;
     // black screen until the 3D icons are ready, then the bar pops in, then typing starts
-    const go = () => { if (started || done) return; started = true; root.classList.add('intro-go'); at(650, begin); };
+    const go = () => { if (started || done) return; started = true; root.classList.add('intro-go'); at(300, begin); };
     addEventListener('drvn:glass-ready', () => requestAnimationFrame(go), { once: true });
-    at(1400, go);
+    at(600, go);
     ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, () => { if (root.classList.contains('intro-1')) finish(); }, { once: true, passive: true }));
   }
 
@@ -1043,7 +1043,7 @@
     let saved = null; try { saved = localStorage.getItem('drvn-consent'); } catch (e) {}
     if (saved) return;
     el.hidden = false;
-    setTimeout(() => el.classList.add('is-on'), root.classList.contains('intro') ? 3800 : 800);
+    setTimeout(() => el.classList.add('is-on'), root.classList.contains('intro') ? 3000 : 800);
     el.addEventListener('click', e => {
       const b = e.target.closest('[data-consent]'); if (!b) return;
       try { localStorage.setItem('drvn-consent', b.dataset.consent); } catch (er) {}
