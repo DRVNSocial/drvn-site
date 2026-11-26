@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=44">
+<link rel="stylesheet" href="assets/css/style.css?v=45">
 <link rel="stylesheet" href="assets/css/game.css?v=1">
 <script>document.documentElement.classList.add('page-work','page-project');</script>
 <!-- Meta Pixel Code -->
@@ -48,7 +48,7 @@ fbq('track', 'PageView');
 <!-- End Meta Pixel Code -->
 <!-- Google tag (gtag.js): Google Ads, consent-gated like the Meta Pixel -->
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-(function(){var ok=false;try{ok=localStorage.getItem('drvn-consent')==='yes'}catch(e){}var v=ok?'granted':'denied';gtag('consent','default',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});})();</script>
+(function(){var ok=false;try{ok=localStorage.getItem('drvn-consent')==='yes'}catch(e){}var v=ok?'granted':'denied';gtag('consent','default',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v,wait_for_update:500});gtag('set','url_passthrough',true);gtag('set','ads_data_redaction',true);})();</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11467728870"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-11467728870');</script>
 <!-- End Google tag -->
@@ -324,11 +324,14 @@ fbq('track', 'PageView');
 <div class="page-glass" id="pageGlass" aria-hidden="true"></div>
 
 <div class="consent" id="consent" role="region" aria-label="Cookie preferences" hidden>
-  <p>We use a few cookies to see what's working. <a href="/privacy">Privacy</a></p>
-  <button type="button" data-consent="no">Decline</button>
-  <button type="button" data-consent="yes" class="is-yes">Accept</button>
+  <p class="consent__title">Cookies OK?</p>
+  <p class="consent__txt">They show us which ads and pages bring people to DRVN. Nothing's tracked unless you say yes. <a href="/privacy">Privacy</a></p>
+  <div class="consent__btns">
+    <button type="button" data-consent="no">Decline</button>
+    <button type="button" data-consent="yes" class="is-yes">Accept</button>
+  </div>
 </div>
-<script src="assets/js/main.js?v=24"></script>
+<script src="assets/js/main.js?v=26"></script>
 <script src="assets/js/project.js?v=10"></script>
 <script src="assets/js/work.js?v=2"></script>
 <script src="assets/js/glass3d.js?v=12" defer></script>

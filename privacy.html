@@ -61,7 +61,7 @@ fbq('track', 'PageView');
 <!-- End Meta Pixel Code -->
 <!-- Google tag (gtag.js): Google Ads, consent-gated like the Meta Pixel -->
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-(function(){var ok=false;try{ok=localStorage.getItem('drvn-consent')==='yes'}catch(e){}var v=ok?'granted':'denied';gtag('consent','default',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});})();</script>
+(function(){var ok=false;try{ok=localStorage.getItem('drvn-consent')==='yes'}catch(e){}var v=ok?'granted':'denied';gtag('consent','default',{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v,wait_for_update:500});gtag('set','url_passthrough',true);gtag('set','ads_data_redaction',true);})();</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11467728870"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-11467728870');</script>
 <!-- End Google tag -->
