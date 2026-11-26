@@ -542,9 +542,9 @@ html.intro-center body.has-cursor{cursor:auto}
    3 headline animates in  ->  4 everything else fades up
    ========================================================= */
 html.intro{overflow:hidden}
-html.intro .nav{transition:transform 1.15s cubic-bezier(.75,0,.2,1)}
+html.intro .nav{transition:transform .65s cubic-bezier(.75,0,.2,1)}
 html.intro-center .nav{transform:translate3d(0,calc(50vh - 16px - 30px),0)}
-html.intro-1 .nav__glass{width:min(360px,calc(100vw - 32px));animation:introPop .7s cubic-bezier(.2,.9,.25,1.15) both}
+html.intro-1 .nav__glass{width:min(360px,calc(100vw - 32px));animation:introPop .4s cubic-bezier(.2,.9,.25,1.15) both}
 /* hold the pop-in until the 3D icons have finished starting up (that work briefly blocks the page) */
 html.intro-1:not(.intro-go) .nav__glass{animation-play-state:paused}
 html.intro-2 .nav__glass{transition:width .95s cubic-bezier(.65,0,.25,1),height .4s var(--ease)}
