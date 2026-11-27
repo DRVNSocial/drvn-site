@@ -2066,3 +2066,18 @@ html.is-thanks{overflow:hidden}
 }
 /* section headings: heading, intro and button rise together, on one layer, same timing */
 .section-head [data-reveal]{transition:opacity .9s var(--ease-out),transform 1s var(--ease-out);transition-delay:0s}
+
+/* opening sequence, quicker finish (option B): the nav opens and the page fades up faster once the bar lands */
+html.intro-2 .nav__glass{transition:width .6s cubic-bezier(.65,0,.25,1),height .3s var(--ease)}
+html.intro .nav__tabs,html.intro .nav__burger{transition:opacity .4s var(--ease)}
+html.intro-2 .nav__tabs{transition:opacity .4s var(--ease) .25s,max-width .6s cubic-bezier(.65,0,.25,1)}
+html.intro-2 .nav__burger{transition-delay:.5s}
+html.intro .nav__cta{transition:opacity .35s var(--ease),padding .6s cubic-bezier(.65,0,.25,1),gap .6s cubic-bezier(.65,0,.25,1)}
+html.intro .cta__roll{transition:max-width .6s cubic-bezier(.65,0,.25,1),opacity .35s var(--ease)}
+html.intro-1 .nav__cta{transition-delay:.15s}
+html.intro-2 .cta__roll{transition-delay:0s,.15s}
+html.intro-2 .nav__cta{transition-delay:0s,0s,0s}
+html.intro #heroStickers,html.intro .ticker{transition:opacity .7s var(--ease)}
+html.intro .hero__foot{transition:opacity .7s var(--ease),transform .8s var(--ease-out)}
+html.intro-4 .hero__foot{transition-delay:.1s}
+html.intro-4 .ticker{transition-delay:.2s}

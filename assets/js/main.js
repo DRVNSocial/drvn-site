@@ -148,7 +148,7 @@
     caret.classList.add('is-typing');
     const typeNext = i => {
       if (done) return;
-      if (i >= paths.length) { caret.classList.remove('is-typing'); return at(300, rest); }   // caret blinks: "enter"
+      if (i >= paths.length) { caret.classList.remove('is-typing'); return at(150, rest); }   // caret blinks: "enter"
       paths[i].p.style.opacity = 1; caretTo(i);
       // human rhythm: uneven keystrokes, the odd hesitation, a proper pause at the "space" before SOCIAL
       let gap = 30 + Math.random() * 55;
@@ -157,22 +157,23 @@
       at(gap, () => typeNext(i + 1));
     };
     at(120, () => typeNext(0));
+    dispatchEvent(new Event('drvn:lift'));   // the studio footage starts rising behind the bar while it types, so there's no long hold on black
     const rest = () => {
       // 2a — the compact bar rises to the top, and the header video starts fading in with it
       root.classList.remove('intro-center'); dispatchEvent(new Event('drvn:lift'));
       // 2b — once it lands, it opens into the full nav and Start Project grows out of its circle, together
       at(650, () => { root.classList.remove('intro-1'); root.classList.add('intro-2'); });
       // 3 — headline animates in as the nav opens
-      at(800, titleIn);
+      at(300, titleIn);
       // 4 — everything else fades up
-      at(1150, () => { root.classList.add('intro-4'); dispatchEvent(new Event('drvn:intro')); });
+      at(700, () => { root.classList.add('intro-4'); dispatchEvent(new Event('drvn:intro')); });
       at(2000, () => { done = true; paths.forEach(o => o.p.style.opacity = ''); root.classList.remove('intro', 'intro-2', 'intro-4', 'intro-go'); caret.remove(); dispatchEvent(new Event('resize')); });
     };
     // skip on any intent to interact
     };
     let started = false;
     // black screen until the 3D icons are ready, then the bar pops in, then typing starts
-    const go = () => { if (started || done) return; started = true; root.classList.add('intro-go'); at(300, begin); };
+    const go = () => { if (started || done) return; started = true; root.classList.add('intro-go'); at(200, begin); };
     addEventListener('drvn:glass-ready', () => requestAnimationFrame(go), { once: true });
     at(600, go);
     ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => addEventListener(ev, () => { if (root.classList.contains('intro-1')) finish(); }, { once: true, passive: true }));
@@ -928,7 +929,7 @@
     const v = $('#heroVideo'), veil = $('#heroFade'); if (!v) return;
     v.loop = false;
     if (reduce) { v.poster = v.dataset.endPoster; v.preload = 'none'; root.classList.add('no-veil'); return; }   // no motion: just the finished shot
-    const FADE = 3.2;                                                             // seconds of footage over which it rises from black
+    const FADE = root.classList.contains('intro') ? 1.8 : 3.2;                                                             // seconds of footage over which it rises from black
     const ease = t => t <= 0 ? 0 : t >= 1 ? 1 : (1 - Math.cos(Math.PI * t)) / 2;  // gentle in and out
     let started = false, bailed = false;
     const step = () => {
